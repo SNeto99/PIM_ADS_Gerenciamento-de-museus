@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-void responderquestionario(const char *perguntas, const char *respostas) {
-    FILE *arquivoPerguntas = fopen("perguntas.txt", "r");
-    FILE *arquivoRespostas = fopen("respostas.txt", "r");
+void responderquestionario() {
+    FILE *arquivoPerguntas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\perguntas.txt", "r");
+    FILE *arquivoRespostas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\respostas.txt", "r");
     
     char linha[300];
     char respostaCorreta[15];  
     int questao = 1;
-    float pontuacao = 0.0;
+    int pontuacao = 0;
 
     if (arquivoPerguntas == NULL || arquivoRespostas == NULL) {
-        printf("Erro ao abrir os arquivos de perguntas e respostas\n");
+        printf("Erro ao abrir os arquivos de perguntas e respostas\n\n");
         return;
     }
   
@@ -42,13 +42,12 @@ void responderquestionario(const char *perguntas, const char *respostas) {
     fclose(arquivoPerguntas);
     fclose(arquivoRespostas);
     
-    printf("Voce acertou %.2f de 15 questoes\n", pontuacao);  
+    printf("Voce acertou %d de 15 questoes\n", pontuacao);  
 }
 
 int main() {
-    const char *perguntas = "perguntas.txt";
-    const char *respostas = "respostas.txt";
-    responderquestionario(perguntas, respostas);
+
+    responderquestionario();
 
     return 0;
 }

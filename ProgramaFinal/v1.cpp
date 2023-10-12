@@ -18,6 +18,7 @@ void venderBilhetes();
 void validarBilhetes();
 void acessarObras();
 void resumoVendas();
+void responderquestionario(int obra);
 
 
 int main(){
@@ -160,7 +161,7 @@ void administracao(){
             validarBilhetes();
         }
         if ((isenter == 1) && (escolha == 2)){
-            acessarObras();
+            responderquestionario();
         }
         if ((isenter == 1) && (escolha == 3)){
             resumoVendas();
@@ -193,5 +194,52 @@ void acessarObras(){
 void resumoVendas(){
     system("cls");
     printf("RESUMO DE VENDAS:\n\n\n");
+    system("pause");
+}
+
+void responderquestionario(int obra) {
+    if (obra == 1){
+    FILE *arquivoPerguntas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\perguntas.txt", "r");
+    FILE *arquivoRespostas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\respostas.txt", "r");
+    }
+
+    char linha[300];
+    char respostaCorreta[15];  
+    int questao = 1;
+    int pontuacao = 0;
+
+    if (arquivoPerguntas == NULL || arquivoRespostas == NULL) {
+        printf("Erro ao abrir os arquivos de perguntas e respostas\n\n");
+        return;
+    }
+  
+    while (fgets(linha, sizeof(linha), arquivoPerguntas) != NULL) {
+        system("cls");
+        printf("Questao %d:\n", questao);
+        printf("%s", linha);  
+
+        char opcoes[4][100];  
+        for (int i = 0; i < 4; i++) {
+            fgets(opcoes[i], sizeof(opcoes[i]), arquivoPerguntas);  
+            printf("%s", opcoes[i]);  
+        }
+
+        fgets(respostaCorreta, sizeof(respostaCorreta), arquivoRespostas);
+
+        char resposta;
+        printf("\nDigite sua resposta: ");
+        scanf(" %c", &resposta);
+
+        if (resposta == respostaCorreta[0]) {
+            pontuacao++;  
+        }
+
+        questao++;  
+    }
+
+    fclose(arquivoPerguntas);
+    fclose(arquivoRespostas);
+    
+    printf("\n\nVoce acertou %d de 15 questoes\n\n\n", pontuacao);  
     system("pause");
 }
