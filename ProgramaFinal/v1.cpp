@@ -10,33 +10,55 @@
 
 
 
-void telainicial(int escolha, char* alternativas, int orientacao);
-char* opcao(int e, char *ponteiro);
-int retornar_selecao(int *p_escolha);
+void telainicial(int escolha, char* alternativas, int orientacao, int num_op);
+char* opcao(int e, char *ponteiro, int num_op);
+int retornar_selecao(int *p_escolha, int num_op);
 void administracao();
 void venderBilhetes();
 void validarBilhetes();
 void acessarObras();
 void resumoVendas();
-void responderquestionario(int obra);
+void responderquestionario(int arquivo);
 
 
 int main(){
-    administracao();
-    return 0;
+    int credenciais = 1;
+
+    switch (credenciais)
+    {
+    case 1:
+        administracao();
+        break;
+    case 2:
+        venderBilhetes();
+        break;
+    case 3:
+        validarBilhetes();
+        break;
+    case 4:
+        acessarObras();
+        break;
+    case 5:
+        resumoVendas();
+        break;
+    }
+
+return 0;
 }
 
-void telainicial(int escolha, char *alternativas, int orientacao){
+
+
+void telainicial(int escolha, char *alternativas, int orientacao, int num_op){
 
     
     char opcoes[NUM_OP][TAM_SETA];
     char *p = &opcoes[0][0]; //aponta para o endereço de memória opcoes[0][0]
-    opcao(escolha, &opcoes[0][0]); //cria o vetor de texto do campo de seleção (onde é "--->" e onde é "    " )
-
+    opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de seleção (onde é "--->" e onde é "    " )
+    
 
         int cont=0;
 
-        for (int i = 0; i < NUM_OP; i++)
+        for (int i = 0; i < num_op; i++)
         {
             for (int j = 0; j < TAM_SETA; j++)
             {
@@ -65,7 +87,7 @@ void telainicial(int escolha, char *alternativas, int orientacao){
         }
 }
 
-int retornar_selecao(int *p_escolha){
+int retornar_selecao(int *p_escolha, int num_op){
     
     char teclapressionada;
     int loop=true;
@@ -79,18 +101,18 @@ int retornar_selecao(int *p_escolha){
                     // printf("%d", teclapressionada);
                     if ((teclapressionada == 72)||(teclapressionada == 75)){ //seta para cima e para a esquerda
                         if (*p_escolha == 0){
-                            *p_escolha = NUM_OP-1;
+                            *p_escolha = num_op-1;
                         }
-                        else if ((*p_escolha > 0)&&(*p_escolha <= NUM_OP)){
+                        else if ((*p_escolha > 0)&&(*p_escolha <= num_op)){
                             *p_escolha= *p_escolha-1;
                         }
                     loop = false;
                     }
                     if ((teclapressionada == 80)||(teclapressionada == 77)){ //seta para baixo e para a direita
-                        if (*p_escolha == NUM_OP-1){
+                        if (*p_escolha == num_op-1){
                             *p_escolha = 0;
                         }
-                         else if ((*p_escolha >= 0)&&(*p_escolha < NUM_OP)){
+                         else if ((*p_escolha >= 0)&&(*p_escolha < num_op)){
                             *p_escolha= *p_escolha+1;
                         }
                     loop = false;
@@ -103,11 +125,12 @@ int retornar_selecao(int *p_escolha){
                 
             }
         }
+    return 0;
 }
 
-char* opcao(int e, char *ponteiro){
+char* opcao(int e, char *ponteiro, int num_op){
     char *p0 = ponteiro;
-    for (int i = 0; i < NUM_OP; i++)
+    for (int i = 0; i < num_op; i++)
     {   
         for (int j = 0; j < TAM_SETA-1; j++)
         {
@@ -134,7 +157,11 @@ char* opcao(int e, char *ponteiro){
     return 0;
 }
 
-void lerplanilha(){
+void lerplanilha(){//Fazer
+
+}
+
+void escreverPlanilha(){//Fazer
 
 }
 
@@ -144,16 +171,17 @@ void lerplanilha(){
 void administracao(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {"VenderBilhetes", "ValidarBilhetes", "AcessarObras", "ResumoVendas","Sair"};
+    char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Obras", "Resumo Vendas","Sair"};
     char *alt = &alternativas[0][0];
+    int num_op = NUM_OP;
     
     while (true)
     {   
         system("cls");
         printf("Bem vindo ao Programa de Administracao de Museus\nO que voce deseja fazer?\n\n");
-        telainicial(escolha, alt , 1);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+        telainicial(escolha, alt , 1, num_op);  //cria os textos da tela inicial, incluindo aonde esta selecionado
        
-        int isenter = retornar_selecao(p_escolha);
+        int isenter = retornar_selecao(p_escolha, num_op);
         if ((isenter == 1) && (escolha == 0)){
             venderBilhetes();
         }
@@ -161,7 +189,7 @@ void administracao(){
             validarBilhetes();
         }
         if ((isenter == 1) && (escolha == 2)){
-            responderquestionario();
+            acessarObras();
         }
         if ((isenter == 1) && (escolha == 3)){
             resumoVendas();
@@ -174,9 +202,53 @@ void administracao(){
 }
 
 void venderBilhetes(){
-    system("cls");
-    printf("MENU DE VENDA DE BILHETES:\n\n\n");
-    system("pause");
+    int escolha = 0;
+    int *p_escolha = &escolha;
+    char alternativas[][30] = {"Santos Dumont", "Arte Moderna", "Exploracao Espacial", "Jogos Olimpicos","Voltar"};
+    int num_op = 5;
+    char *alt = &alternativas[0][0];
+    
+    while (true)
+    {   
+        system("cls");
+        printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
+        telainicial(escolha, alt , 1, 5);
+       
+        int isenter = retornar_selecao(p_escolha, num_op);
+        if (isenter == 1){
+            int escolhatipo = 0;
+            int *p_escolhatipo = &escolhatipo;
+            char meiaouinteira[][30] = {"Inteira", "Meia", "Voltar"};
+            char *moi = &meiaouinteira[0][0];
+            while (true)
+            {   
+                system("cls");
+                printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
+                telainicial(escolha, alt , 1, 5);
+                if (escolha !=4){
+                    printf("\nSELECIONE O TIPO DE INGRESSO:\n\n\t");
+                    telainicial(escolhatipo, moi , 0, 3);
+                    int isinteira = retornar_selecao(p_escolhatipo, 3);
+                    if ((isinteira == 1)&&(escolhatipo != 2)){//adicionar o ingresso comprado aos ingressos comprados, algo como: addingresso(escolha, p_escolha);
+                        printf("\n\n\t 1/%d ingresso para a obra %d adicionado ao seu carrinho!\n\n", escolhatipo+1, escolha+1);
+                        system("pause");
+                        break;
+                    }
+                    if ((isinteira == 1)&&(escolhatipo == 2)){
+                        break;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+            
+        }
+        if ((isenter == 1) && (escolha == 4)){
+            printf("\n\n");
+            break;
+        }
+    }
 }
 
 void validarBilhetes(){
@@ -186,9 +258,39 @@ void validarBilhetes(){
 }
 
 void acessarObras(){
-    system("cls");
-    printf("ACESSO AS OBRAS:\n\n\n");
-    system("pause");
+    int escolha = 0;
+    int *p_escolha = &escolha;
+    char alternativas[][30] = {"Santos Dumont", "Arte Moderna", "Exploracao Espacial", "Jogos Olimpicos","Sair"};
+    int num_op = 5;
+    char *alt = &alternativas[0][0];
+    
+    while (true)
+    {   
+        system("cls");
+        printf("\n\tSELECIONE O QUESTIONARIO QUE VOCE DESEJA INICIAR:\n\n");
+        telainicial(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+       
+        int isenter = retornar_selecao(p_escolha, num_op);
+        if ((isenter == 1) && (escolha == 0)){
+            responderquestionario(0);
+        }
+        if ((isenter == 1) && (escolha == 1)){
+            responderquestionario(1);
+
+        }
+        if ((isenter == 1) && (escolha == 2)){
+            responderquestionario(2);
+
+        }
+        if ((isenter == 1) && (escolha == 3)){
+            responderquestionario(3);
+
+        }
+        if ((isenter == 1) && (escolha == 4)){
+            printf("\n\n");
+            break;
+        }
+    }
 }
 
 void resumoVendas(){
@@ -197,11 +299,28 @@ void resumoVendas(){
     system("pause");
 }
 
-void responderquestionario(int obra) {
-    if (obra == 1){
-    FILE *arquivoPerguntas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\perguntas.txt", "r");
-    FILE *arquivoRespostas = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\respostas.txt", "r");
+void responderquestionario(int arquivo) {
+    FILE *arquivoPerguntas_SantosDumont = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\perguntas.txt", "r");
+    FILE *arquivoRespostas_SantosDumont = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\respostas.txt", "r");
+    
+    // FILE *arquivoPerguntas_ArteModerna = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\arte_moderna", "r");
+    // FILE *arquivoRespostas_ArteModerna = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\arte_moderna", "r");
+    
+    // FILE *arquivoPerguntas_JogosOlimpicos = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\exploracao_espacial", "r");
+    // FILE *arquivoRespostas_JogosOlimpicos = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\exploracao_espacial", "r");
+    
+    // FILE *arquivoPerguntas_ExploracaoEspacial = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\jogos_olimpicos", "r");
+    // FILE *arquivoRespostas_ExploracaoEspacial = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\jogos_olimpicos", "r");
+    
+    FILE *arquivoPerguntas;
+    FILE *arquivoRespostas;
+
+    if (arquivo == 0)
+    {
+        arquivoPerguntas = arquivoPerguntas_SantosDumont;
+        arquivoRespostas = arquivoRespostas_SantosDumont;
     }
+    
 
     char linha[300];
     char respostaCorreta[15];  
