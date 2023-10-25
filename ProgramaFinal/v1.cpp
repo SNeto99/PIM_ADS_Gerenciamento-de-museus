@@ -7,10 +7,23 @@
 
 #define NUM_OP 5
 #define T_PONT 5 
+
+
 #define OBRA1 "Santos Dumont"
+#define CP_OBRA1 "..\\Questionarios\\questionario_Santos-Dumont.txt"
+#define CR_OBRA1 "..\\Questionarios\\respostas_Santos-Dumont.txt"
+
 #define OBRA2 "Arte Moderna"
+#define CP_OBRA2 "..\\Questionarios\\questionario_Arte-Moderna.txt"
+#define CR_OBRA2 "..\\Questionarios\\respostas_Arte-Moderna.txt"
+
 #define OBRA3 "Exploracao Espacial"
+#define CP_OBRA3 "..\\Questionarios\\questionario_Espacial.txt"
+#define CR_OBRA3 "..\\Questionarios\\respostas_Espacial.txt"
+
 #define OBRA4 "Jogos Olimpicos"
+#define CP_OBRA4 "..\\Questionarios\\questionario_Jogos-Olimpicos.txt"
+#define CR_OBRA4 "..\\Questionarios\\respostas_Jogos-Olimpicos.txt"
 
 
 
@@ -163,11 +176,65 @@ char* opcao(int e, char *ponteiro, int num_op){
     return 0;
 }
 
-void lerplanilha(){//Fazer
+void salvarCompra(int obra, int meiaouinteira, int validado){
 
+    char nomeobra[50];
+    char c_meiaouinteira;
+    char c_validado;
+
+    switch (obra){
+        case 0:
+            strcpy(nomeobra, OBRA1);
+            break;
+
+        case 1:
+            strcpy(nomeobra, OBRA1);
+            break;
+    
+        case 2:
+            strcpy(nomeobra, OBRA1);
+            break;
+        
+        case 3:
+            strcpy(nomeobra, OBRA1);
+            break;
+    }
+        
+    switch (meiaouinteira){
+        case 0:
+            c_meiaouinteira = 'I';
+            break;
+
+        case 1:
+            c_meiaouinteira = 'M';
+            break;
+    }
+
+    switch (validado){
+        case 0:
+            c_validado = '!';
+            break;
+        case 1:
+            c_validado = 'X';
+            break;
+    }
+    
+    
+    FILE *arquivo = fopen("tickets.csv", "w");
+    
+    if (arquivo != NULL) {
+            fprintf(arquivo, "\'%s;", nomeobra);
+            fprintf(arquivo, "\'%c;", c_meiaouinteira);
+            fprintf(arquivo, "\'%c\n", c_validado);
+            fclose(arquivo);
+        }
+    else {
+        printf("Erro ao abrir o arquivo para salvar os tickets.\n");
+        system("pause");
+    }
 }
 
-void escreverPlanilha(){//Fazer
+void lerplanilha(){//Fazer
 
 }
 
@@ -177,7 +244,7 @@ void escreverPlanilha(){//Fazer
 void administracao(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Obras", "Resumo Vendas","Sair"};
+    char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Questionarios", "Resumo Vendas","Sair"};
     char *alt = &alternativas[0][0];
     int num_op = NUM_OP;
     
@@ -260,64 +327,6 @@ void venderBilhetes(){
     }
 }
 
-void salvarCompra(int obra, int meiaouinteira, int validado){
-
-    char nomeobra[50];
-    char c_meiaouinteira;
-    char c_validado;
-
-    switch (obra){
-        case 0:
-            strcpy(nomeobra, OBRA1);
-            break;
-
-        case 1:
-            strcpy(nomeobra, OBRA2);
-            break;
-    
-        case 2:
-            strcpy(nomeobra, OBRA3);
-            break;
-        
-        case 3:
-            strcpy(nomeobra, OBRA4);
-            break;
-    }
-        
-    switch (meiaouinteira){
-        case 0:
-            c_meiaouinteira = 'I';
-            break;
-
-        case 1:
-            c_meiaouinteira = 'M';
-            break;
-    }
-
-    switch (validado){
-        case 0:
-            c_validado = '!';
-            break;
-        case 1:
-            c_validado = 'X';
-            break;
-    }
-    
-    
-    FILE *arquivo = fopen("tickets.csv", "a");
-    
-    if (arquivo != NULL) {
-            fprintf(arquivo, "\'%s\';", nomeobra);
-            fprintf(arquivo, "\'%c\';", c_meiaouinteira);
-            fprintf(arquivo, "\'%c\'\n", c_validado);
-            fclose(arquivo);
-        }
-    else {
-        printf("Erro ao abrir o arquivo para salvar os tickets.\n");
-        system("pause");
-    }
-}
-
 void validarBilhetes(){
     system("cls");
     printf("MENU DE VALIDACAO DE BILHETES:\n\n\n");
@@ -327,7 +336,7 @@ void validarBilhetes(){
 void acessarObras(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {"Santos Dumont", "Arte Moderna", "Exploracao Espacial", "Jogos Olimpicos","Sair"};
+    char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4, "Sair"};
     int num_op = 5;
     char *alt = &alternativas[0][0];
     
@@ -337,7 +346,8 @@ void acessarObras(){
         printf("\n\tSELECIONE O QUESTIONARIO QUE VOCE DESEJA INICIAR:\n\n");
         telainicial(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
        
-        int isenter = retornar_selecao(p_escolha, num_op);
+        int isenter = 0;
+        isenter= retornar_selecao(p_escolha, num_op);
         if ((isenter == 1) && (escolha == 0)){
             responderquestionario(0);
         }
@@ -367,25 +377,28 @@ void resumoVendas(){
 }
 
 void responderquestionario(int arquivo) {
-    FILE *arquivoPerguntas_SantosDumont = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\perguntas.txt", "r");
-    FILE *arquivoRespostas_SantosDumont = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\santos_dumont\\PIM - Questionario\\respostas.txt", "r");
-    
-    // FILE *arquivoPerguntas_ArteModerna = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\arte_moderna", "r");
-    // FILE *arquivoRespostas_ArteModerna = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\arte_moderna", "r");
-    
-    // FILE *arquivoPerguntas_JogosOlimpicos = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\exploracao_espacial", "r");
-    // FILE *arquivoRespostas_JogosOlimpicos = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\exploracao_espacial", "r");
-    
-    // FILE *arquivoPerguntas_ExploracaoEspacial = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\jogos_olimpicos", "r");
-    // FILE *arquivoRespostas_ExploracaoEspacial = fopen("C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\temas\\jogos_olimpicos", "r");
-    
+
     FILE *arquivoPerguntas;
     FILE *arquivoRespostas;
 
-    if (arquivo == 0)
+    switch (arquivo)
     {
-        arquivoPerguntas = arquivoPerguntas_SantosDumont;
-        arquivoRespostas = arquivoRespostas_SantosDumont;
+        case 0:
+            arquivoPerguntas = fopen(CP_OBRA1, "r");
+            arquivoRespostas = fopen(CR_OBRA1, "r");
+            break;
+        case 1:
+            arquivoPerguntas = fopen(CP_OBRA2, "r");
+            arquivoRespostas = fopen(CR_OBRA2, "r");
+            break;
+        case 2:
+            arquivoPerguntas = fopen(CP_OBRA3, "r");
+            arquivoRespostas = fopen(CR_OBRA3, "r");
+            break;
+        case 3:
+            arquivoPerguntas = fopen(CP_OBRA4, "r");
+            arquivoRespostas = fopen(CR_OBRA4, "r");
+            break;
     }
     
 
@@ -396,6 +409,7 @@ void responderquestionario(int arquivo) {
 
     if (arquivoPerguntas == NULL || arquivoRespostas == NULL) {
         printf("Erro ao abrir os arquivos de perguntas e respostas\n\n");
+        system("pause");
         return;
     }
   
@@ -426,6 +440,7 @@ void responderquestionario(int arquivo) {
     fclose(arquivoPerguntas);
     fclose(arquivoRespostas);
     
-    printf("\n\nVoce acertou %d de 15 questoes\n\n\n", pontuacao);  
+    system("cls");
+    printf("\n\n\t Voce acertou %d de 15 questoes\n\n\n", pontuacao);  
     system("pause");
 }
