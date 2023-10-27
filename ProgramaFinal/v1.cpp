@@ -429,22 +429,33 @@ void acessarObras(){
        
         int isenter = 0;
         isenter= retornar_selecao(p_escolha, num_op);
-        if ((isenter == 1) && (escolha == 0)){
-            responderquestionario(0);
-        }
-        if ((isenter == 1) && (escolha == 1)){
-            responderquestionario(1);
+        
+        if ((isenter)&&(escolha != 4))
+        {
+            int confirmar = 0;
+            int *p_confirmar = &confirmar;
+            char alternativas_2[][30] = {"Iniciar", "Voltar"};
+            char *alt_2 = &alternativas_2[0][0];
+            while (true)
+            {
+                system("cls");
+                printf("\n\tQUESTIONARIO: %s", alternativas[escolha]);
+                printf("\n\n\t");
+                telainicial(confirmar, alt_2 , 0, 2);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+                int isenter_2 = 0;
+                isenter_2= retornar_selecao(p_confirmar, 2);
 
-        }
-        if ((isenter == 1) && (escolha == 2)){
-            responderquestionario(2);
+                if ((isenter_2 == 1) && (confirmar == 0)){
+                    responderquestionario(escolha);
+                }
 
+                if ((isenter_2 == 1) && (confirmar == 1)){
+                    break;
+                }
+            }
         }
-        if ((isenter == 1) && (escolha == 3)){
-            responderquestionario(3);
-
-        }
-        if ((isenter == 1) && (escolha == 4)){
+        
+        if ((isenter) && (escolha == 4)){
             printf("\n\n");
             break;
         }
@@ -522,6 +533,12 @@ void responderquestionario(int arquivo) {
     fclose(arquivoRespostas);
     
     system("cls");
-    printf("\n\n\t Voce acertou %d de 15 questoes\n\n\n", pontuacao);  
+
+    printf("\n\n");
+    printf("\t ________________________________________ \n");
+    printf("\t|                                        |\n");
+    printf("\t|     Voce acertou %d de 15 questoes     |\n", pontuacao);
+    printf("\t|________________________________________|\n");
+    printf("\n\n\n");
     system("pause");
 }
