@@ -9,19 +9,19 @@
 #define T_PONT 5 
 
 
-#define OBRA1 "Santos Dumont"
+#define OBRA1 "Santos Dumont       "
 #define CP_OBRA1 "..\\Questionarios\\questionario_Santos-Dumont.txt"
 #define CR_OBRA1 "..\\Questionarios\\respostas_Santos-Dumont.txt"
 
-#define OBRA2 "Arte Moderna"
+#define OBRA2 "Arte Moderna        "
 #define CP_OBRA2 "..\\Questionarios\\questionario_Arte-Moderna.txt"
 #define CR_OBRA2 "..\\Questionarios\\respostas_Arte-Moderna.txt"
 
-#define OBRA3 "Exploracao Espacial"
+#define OBRA3 "Exploracao Espacial "
 #define CP_OBRA3 "..\\Questionarios\\questionario_Espacial.txt"
 #define CR_OBRA3 "..\\Questionarios\\respostas_Espacial.txt"
 
-#define OBRA4 "Jogos Olimpicos"
+#define OBRA4 "Jogos Olimpicos     "
 #define CP_OBRA4 "..\\Questionarios\\questionario_Jogos-Olimpicos.txt"
 #define CR_OBRA4 "..\\Questionarios\\respostas_Jogos-Olimpicos.txt"
 
@@ -37,7 +37,10 @@ void validarBilhetes();
 void acessarObras();
 void resumoVendas();
 void responderquestionario(int arquivo);
-void salvarCompra(int obra, int escolha2, int meiaouinteira);
+void salvarCompra(int obra, int meiaouinteira);
+double codigoID();
+void ticket(int obra, int codigo);
+void horaAtual();
 
 
 int main(){
@@ -176,11 +179,29 @@ char* opcao(int e, char *ponteiro, int num_op){
     return 0;
 }
 
-void salvarCompra(int obra, int meiaouinteira, int validado){
+void horaAtual(){
+    time_t tempo_atual;
+    struct tm *info_tempo;
+    char buffer[80];
+
+    // Obter o tempo atual
+    time(&tempo_atual);
+
+    // Converter o tempo atual em uma estrutura de tm
+    info_tempo = localtime(&tempo_atual);
+
+    // Formatando a hora atual como string
+    strftime(buffer, sizeof(buffer), "%d/%m/%Y %H:%M:%S", info_tempo);
+
+    // Imprimir a hora atual
+    printf("%s", buffer);
+}
+
+void salvarCompra(int obra, int meiaouinteira){
 
     char nomeobra[50];
     char c_meiaouinteira;
-    char c_validado;
+    double codigo = codigoID();
 
     switch (obra){
         case 0:
@@ -188,15 +209,15 @@ void salvarCompra(int obra, int meiaouinteira, int validado){
             break;
 
         case 1:
-            strcpy(nomeobra, OBRA1);
+            strcpy(nomeobra, OBRA2);
             break;
     
         case 2:
-            strcpy(nomeobra, OBRA1);
+            strcpy(nomeobra, OBRA3);
             break;
         
         case 3:
-            strcpy(nomeobra, OBRA1);
+            strcpy(nomeobra, OBRA4);
             break;
     }
         
@@ -209,29 +230,58 @@ void salvarCompra(int obra, int meiaouinteira, int validado){
             c_meiaouinteira = 'M';
             break;
     }
+    
+    FILE *arquivo = fopen("tickets.csv", "a");
+    
 
-    switch (validado){
-        case 0:
-            c_validado = '!';
-            break;
-        case 1:
-            c_validado = 'X';
-            break;
-    }
-    
-    
-    FILE *arquivo = fopen("tickets.csv", "w");
-    
     if (arquivo != NULL) {
-            fprintf(arquivo, "\'%s;", nomeobra);
-            fprintf(arquivo, "\'%c;", c_meiaouinteira);
-            fprintf(arquivo, "\'%c\n", c_validado);
+            fprintf(arquivo, "\'%.f\';", codigo);
+            fprintf(arquivo, "\'%s\';", nomeobra);
+            fprintf(arquivo, "\'%c\'\n", c_meiaouinteira);
             fclose(arquivo);
+
+            
+            printf("\t\t\t ______________________________________________ \n");
+            printf("\t\t\t|                                              |\n");
+            printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
+            printf("\t\t\t|                %s          |\n"              , nomeobra);
+            printf("\t\t\t|                                              |\n");
+            printf("\t\t\t|                                              |\n");
+            printf("\t\t\t|  id: %.f                            |\n"     , codigo);
+            printf("\t\t\t|                                              |\n");
+            printf("\t\t\t|           hora da compra:");horaAtual()      ;printf(" |\n");
+            printf("\t\t\t|______________________________________________|\n");
+            printf("\n\n\n");
+            system("pause");
+
+
         }
     else {
         printf("Erro ao abrir o arquivo para salvar os tickets.\n");
         system("pause");
     }
+}
+
+double codigoID() {
+    time_t hora_atual;
+    struct tm *info_tempo;
+
+    // Obter o tempo atual
+    time(&hora_atual);
+
+    // Converter o tempo atual em uma estrutura de tm
+    info_tempo = localtime(&hora_atual);
+
+    // Calcular o número inteiro no formato "%y%m%d%H%M%S"
+    double codigo = ((info_tempo->tm_year % 100) * 10000000000) +
+                            ((info_tempo->tm_mon + 1)    * 100000000) +
+                            (info_tempo->tm_mday         * 1000000) +
+                            (info_tempo->tm_hour         * 10000) +
+                            (info_tempo->tm_min          * 100) +
+                            info_tempo->tm_sec;
+
+    
+    return codigo;
 }
 
 void lerplanilha(){//Fazer
@@ -251,7 +301,7 @@ void administracao(){
     while (true)
     {   
         system("cls");
-        printf("Bem vindo ao Programa de Administracao de Museus\nO que voce deseja fazer?\n\n");
+        printf("\nBem vindo ao Programa de Administracao de Museus\nO que voce deseja fazer?\n\n");
         telainicial(escolha, alt , 1, num_op);  //cria os textos da tela inicial, incluindo aonde esta selecionado
        
         int isenter = retornar_selecao(p_escolha, num_op);
@@ -278,8 +328,8 @@ void venderBilhetes(){
     int escolha = 0;
     int *p_escolha = &escolha;
     char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4,"Voltar"};
-    int num_op = 5;
     char *alt = &alternativas[0][0];
+    int num_op = 5;
     
     while (true)
     {   
@@ -293,22 +343,53 @@ void venderBilhetes(){
             int *p_escolhatipo = &escolhatipo;
             char meiaouinteira[][30] = {"Inteira", "Meia", "Voltar"};
             char *moi = &meiaouinteira[0][0];
+
+
             while (true)
             {   
                 system("cls");
                 printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
                 telainicial(escolha, alt , 1, 5);
                 if (escolha !=4){
-                    printf("\nSELECIONE O TIPO DE INGRESSO:\n\n\t");
+                    printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                     telainicial(escolhatipo, moi , 0, 3);
                     int isinteira = retornar_selecao(p_escolhatipo, 3);
-                    if ((isinteira == 1)&&(escolhatipo != 2)){//adicionar o ingresso comprado aos ingressos comprados, algo como: addingresso(escolha, p_escolha);
+                    if ((isinteira == 1)&&(escolhatipo != 2)){
 
-                        salvarCompra(escolha, escolhatipo, 0);
+                        int confirmar = 0;
+                        int *p_confirmar = &confirmar;
+                        char escolha_conf[][15] = {"CONFIRMAR", "CANCELAR"};
+                        char *p_escolha_conf = &escolha_conf[0][0]; 
+                        int comprado = 0;
+                        
 
-                        printf("\n\n\t 1/%d ingresso para a obra %d adicionado ao seu carrinho!\n\n", escolhatipo+1, escolha+1);
-                        system("pause");
-                        break;
+                        while (true)
+                        {
+                            system("cls");
+                            printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
+                            telainicial(escolha, alt , 1, 5);
+                            printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
+                            telainicial(escolhatipo, moi , 0, 3);
+
+             
+                            printf("\n\n\n");
+                            telainicial(confirmar, p_escolha_conf, 1, 2);
+                            comprado = retornar_selecao(p_confirmar, 2);
+
+                            if ((comprado == 1)&&(confirmar==0))
+                            {
+                                salvarCompra(escolha, escolhatipo);
+                                break;   
+                            }
+                            else if ((comprado == 1)&&(confirmar==1)){
+                                break;
+                            }
+                        }
+
+                        if (comprado == 1){
+                            break;
+                        }
+
                     }
                     if ((isinteira == 1)&&(escolhatipo == 2)){
                         break;
@@ -370,7 +451,7 @@ void acessarObras(){
     }
 }
 
-void resumoVendas(){
+void resumoVendas(){//Fazer
     system("cls");
     printf("RESUMO DE VENDAS:\n\n\n");
     system("pause");
