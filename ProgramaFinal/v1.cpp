@@ -25,7 +25,16 @@
 #define CP_OBRA4 "..\\Questionarios\\questionario_Jogos-Olimpicos.txt"
 #define CR_OBRA4 "..\\Questionarios\\respostas_Jogos-Olimpicos.txt"
 
+#define CAM_TICKETS "..\\output\\tickets.csv"
 
+
+//  O que falta:
+
+// 	    !resumo de vendas
+// 	    !credenciais
+// 	    ?confirmação de pagamento
+// 	    opção de sair do questionario
+// 	    opção de sair da validaçao
 
 
 void telainicial(int escolha, char* alternativas, int orientacao, int num_op);
@@ -39,11 +48,15 @@ void resumoVendas();
 void responderquestionario(int arquivo);
 void salvarCompra(int obra, int meiaouinteira);
 double codigoID();
-void ticket(int obra, int codigo);
-void horaAtual();
-
+char* horaAtual();
+void lerarquivo();
+void lerarquivoevalidar();
+void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]);
 
 int main(){
+    
+    system("chcp 65001 > null");
+
     int credenciais = 1;
 
     switch (credenciais)
@@ -179,10 +192,10 @@ char* opcao(int e, char *ponteiro, int num_op){
     return 0;
 }
 
-void horaAtual(){
+char* horaAtual() {
     time_t tempo_atual;
     struct tm *info_tempo;
-    char buffer[80];
+    static char buffer[80]; // static para garantir que o buffer seja preservado
 
     // Obter o tempo atual
     time(&tempo_atual);
@@ -193,14 +206,13 @@ void horaAtual(){
     // Formatando a hora atual como string
     strftime(buffer, sizeof(buffer), "%d/%m/%Y %H:%M:%S", info_tempo);
 
-    // Imprimir a hora atual
-    printf("%s", buffer);
+    return buffer;
 }
 
 void salvarCompra(int obra, int meiaouinteira){
 
     char nomeobra[50];
-    char c_meiaouinteira;
+    char char_meiaouinteira;
     double codigo = codigoID();
 
     switch (obra){
@@ -220,38 +232,37 @@ void salvarCompra(int obra, int meiaouinteira){
             strcpy(nomeobra, OBRA4);
             break;
     }
-        
+    
     switch (meiaouinteira){
         case 0:
-            c_meiaouinteira = 'I';
+            char_meiaouinteira = 'I';
             break;
 
         case 1:
-            c_meiaouinteira = 'M';
+            char_meiaouinteira = 'M';
+            break;
+
+        case 2:
+            char_meiaouinteira = 'X';
             break;
     }
+        
     
     FILE *arquivo = fopen("tickets.csv", "a");
     
 
-    if (arquivo != NULL) {
-            fprintf(arquivo, "\'%.f\';", codigo);
-            fprintf(arquivo, "\'%s\';", nomeobra);
-            fprintf(arquivo, "\'%c\'\n", c_meiaouinteira);
+    if (arquivo != NULL)
+    {
+            char *hora = horaAtual();
+            fprintf(arquivo, "%.f;"    , codigo);
+            fprintf(arquivo, "%s;" , nomeobra);
+            fprintf(arquivo, "%c;" , char_meiaouinteira);
+            fprintf(arquivo, "%s\n", hora);
             fclose(arquivo);
 
-            
-            printf("\t\t\t ______________________________________________ \n");
-            printf("\t\t\t|                                              |\n");
-            printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
-            printf("\t\t\t|                %s          |\n"              , nomeobra);
-            printf("\t\t\t|                                              |\n");
-            printf("\t\t\t|                                              |\n");
-            printf("\t\t\t|  id: %.f                            |\n"     , codigo);
-            printf("\t\t\t|                                              |\n");
-            printf("\t\t\t|           hora da compra:");horaAtual()      ;printf(" |\n");
-            printf("\t\t\t|______________________________________________|\n");
-            printf("\n\n\n");
+            char str_codigo[50];
+            sprintf(str_codigo, "%.f", codigo);
+            ticket(nomeobra, char_meiaouinteira, str_codigo, hora);
             system("pause");
 
 
@@ -284,10 +295,131 @@ double codigoID() {
     return codigo;
 }
 
-void lerplanilha(){//Fazer
+void lerarquivo(){
+    FILE *arquivo;
+    arquivo = fopen(CAM_TICKETS, "r");
 
+    char matriz[100][4][30];
+    int linhas = 0;
+
+    if (arquivo != NULL) 
+    {
+        char *m1;
+        char *m2;
+        char *m3;
+        char *m4;
+
+
+        do
+        {
+            m1=matriz[linhas][0];
+            m2=matriz[linhas][1];
+            m3=matriz[linhas][2];
+            m4=matriz[linhas][3];
+            linhas++;
+
+
+        } while(fscanf(arquivo, "%[^;];%[^;];%[^;];%[^\n]\n", m1, m2, m3, m4) != EOF);
+
+        fclose(arquivo);
+        printf("\n");
+    }
+
+    else{
+        printf("Erro ao abrir o arquivo.\n");
+        system("pause");
+    }
+    
+    for (int i=0; i<linhas-1; i++){
+        printf("%s ; %s ; %s ; %s\n", matriz[i][0], matriz[i][1], matriz[i][2], matriz[i][3]);
+    }
+ 
 }
 
+void lerarquivoevalidar() {
+    
+    char ticket_validar[13];
+    printf("Digite o nº do ticket para validar: ");
+    scanf("%s", ticket_validar);
+    
+    FILE *arquivo;
+    arquivo = fopen(CAM_TICKETS, "r");
+
+    char matriz[100][4][30];
+    int linhas = 0;
+
+    if (arquivo != NULL) 
+    {
+        char *m1;
+        char *m2;
+        char *m3;
+        char *m4;
+
+
+        do
+        {
+            m1=matriz[linhas][0];
+            m2=matriz[linhas][1];
+            m3=matriz[linhas][2];
+            m4=matriz[linhas][3];
+            linhas++;
+
+
+        } while(fscanf(arquivo, "%[^;];%[^;];%[^;];%[^\n]\n", m1, m2, m3, m4) != EOF);
+
+        fclose(arquivo);
+        printf("\n");
+    }
+
+    else{
+        printf("Erro ao abrir o arquivo.\n");
+        system("pause");
+    }
+
+
+    for (int i=0; i<linhas-1; i++){
+        if (strcmp(matriz[i][0], ticket_validar) == 0)
+        {
+            printf("\nTicket validado:\n\n");
+            ticket(matriz[i][1], *matriz[i][2], matriz[i][0], matriz[i][3]);
+            break;
+        }
+        
+    }
+   
+}
+
+void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]){
+
+    char str_meiaouinteira[50];
+
+    switch (char_meiaouinteira){
+        case 'I':
+            strcpy(str_meiaouinteira, "Inteira");
+            break;
+
+        case 'M':
+            strcpy(str_meiaouinteira, "Meia   ");
+            break;
+
+        case 'X':
+            strcpy(str_meiaouinteira, "Isento ");
+            break;
+    }
+
+    printf("\t\t\t ______________________________________________ \n");
+    printf("\t\t\t|                                              |\n");
+    printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
+    printf("\t\t\t|                %s          |\n"              , nomeobra);
+    printf("\t\t\t|                   %s                    |\n" , str_meiaouinteira);
+    printf("\t\t\t|                                              |\n");
+    printf("\t\t\t|                                              |\n");
+    printf("\t\t\t|  id: %s                            |\n"      , str_codigo);
+    printf("\t\t\t|                                              |\n");
+    printf("\t\t\t|           hora da compra:%s |\n"             , hora);
+    printf("\t\t\t|______________________________________________|\n");
+    printf("\n\n\n");
+}
 
 
 
@@ -341,7 +473,7 @@ void venderBilhetes(){
         if (isenter == 1){
             int escolhatipo = 0;
             int *p_escolhatipo = &escolhatipo;
-            char meiaouinteira[][30] = {"Inteira", "Meia", "Voltar"};
+            char meiaouinteira[][30] = {"Inteira", "Meia", "Isento", "Voltar"};
             char *moi = &meiaouinteira[0][0];
 
 
@@ -352,9 +484,9 @@ void venderBilhetes(){
                 telainicial(escolha, alt , 1, 5);
                 if (escolha !=4){
                     printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
-                    telainicial(escolhatipo, moi , 0, 3);
-                    int isinteira = retornar_selecao(p_escolhatipo, 3);
-                    if ((isinteira == 1)&&(escolhatipo != 2)){
+                    telainicial(escolhatipo, moi , 0, 4);
+                    int isinteira = retornar_selecao(p_escolhatipo, 4);
+                    if ((isinteira == 1)&&(escolhatipo != 3)){
 
                         int confirmar = 0;
                         int *p_confirmar = &confirmar;
@@ -369,7 +501,7 @@ void venderBilhetes(){
                             printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
                             telainicial(escolha, alt , 1, 5);
                             printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
-                            telainicial(escolhatipo, moi , 0, 3);
+                            telainicial(escolhatipo, moi , 0, 4);
 
              
                             printf("\n\n\n");
@@ -391,7 +523,7 @@ void venderBilhetes(){
                         }
 
                     }
-                    if ((isinteira == 1)&&(escolhatipo == 2)){
+                    if ((isinteira == 1)&&(escolhatipo == 3)){
                         break;
                     }
                 }
@@ -411,6 +543,9 @@ void venderBilhetes(){
 void validarBilhetes(){
     system("cls");
     printf("MENU DE VALIDACAO DE BILHETES:\n\n\n");
+
+    lerarquivoevalidar();
+
     system("pause");
 }
 
@@ -465,6 +600,8 @@ void acessarObras(){
 void resumoVendas(){//Fazer
     system("cls");
     printf("RESUMO DE VENDAS:\n\n\n");
+    lerarquivo();
+    printf("\n\n\n");
     system("pause");
 }
 
@@ -537,7 +674,7 @@ void responderquestionario(int arquivo) {
     printf("\n\n");
     printf("\t ________________________________________ \n");
     printf("\t|                                        |\n");
-    printf("\t|     Voce acertou %d de 15 questoes     |\n", pontuacao);
+    printf("\t|     Voce acertou %02d de 15 questoes    |\n", pontuacao);
     printf("\t|________________________________________|\n");
     printf("\n\n\n");
     system("pause");
