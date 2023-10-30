@@ -5,7 +5,7 @@
 #include <locale.h>
 #include <time.h>
 
-#define NUM_OP 5
+#define NUM_OP 6
 #define T_PONT 5 
 
 
@@ -141,7 +141,7 @@ int retornar_selecao(int *p_escolha, int num_op){
                         else if ((*p_escolha > 0)&&(*p_escolha <= num_op)){
                             *p_escolha= *p_escolha-1;
                         }
-                    loop = false;
+                        loop = false;
                     }
                     if ((teclapressionada == 80)||(teclapressionada == 77)){ //seta para baixo e para a direita
                         if (*p_escolha == num_op-1){
@@ -150,7 +150,7 @@ int retornar_selecao(int *p_escolha, int num_op){
                          else if ((*p_escolha >= 0)&&(*p_escolha < num_op)){
                             *p_escolha= *p_escolha+1;
                         }
-                    loop = false;
+                        loop = false;
                     }
                 }
                 else if (teclapressionada  == 13)
@@ -428,7 +428,7 @@ void administracao(){
     int *p_escolha = &escolha;
     char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Questionarios", "Resumo Vendas","Sair"};
     char *alt = &alternativas[0][0];
-    int num_op = NUM_OP;
+    int num_op = 5;
     
     while (true)
     {   
@@ -559,32 +559,50 @@ void acessarObras(){
     while (true)
     {   
         system("cls");
-        printf("\n\tSELECIONE O QUESTIONARIO QUE VOCE DESEJA INICIAR:\n\n");
+        printf("\n\tSELECIONE O TEMA QUE VOCE DESEJA:\n\n");
         telainicial(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
-       
         int isenter = 0;
         isenter= retornar_selecao(p_escolha, num_op);
         
         if ((isenter)&&(escolha != 4))
         {
-            int confirmar = 0;
-            int *p_confirmar = &confirmar;
-            char alternativas_2[][30] = {"Iniciar", "Voltar"};
+            int escolha_obra = 0;
+            int *p_escolha_obra = &escolha_obra;
+            char alternativas_2[][30] = {"obra 1", "obra 2", "obra 3", "obra 4", "obra 5", "Voltar"};
+            int num_op_obras = 6;
             char *alt_2 = &alternativas_2[0][0];
             while (true)
             {
                 system("cls");
-                printf("\n\tQUESTIONARIO: %s", alternativas[escolha]);
-                printf("\n\n\t");
-                telainicial(confirmar, alt_2 , 0, 2);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+                printf("\n\tSELECIONE A OBRA QUE VOCE DESEJA:\n\n");
+                telainicial(escolha_obra, alt_2 , 1, num_op_obras);  //cria os textos da tela inicial, incluindo aonde esta selecionado
                 int isenter_2 = 0;
-                isenter_2= retornar_selecao(p_confirmar, 2);
+                isenter_2= retornar_selecao(p_escolha_obra, num_op_obras);
 
-                if ((isenter_2 == 1) && (confirmar == 0)){
-                    responderquestionario(escolha);
+                if ((isenter_2) && (escolha_obra != num_op_obras-1))
+                {
+                    int confirmar = 0;
+                    int *p_confirmar = &confirmar;
+                    char alternativas_3[][30] = {"Iniciar", "Voltar"};
+                    char *alt_3 = &alternativas_3[0][0];
+                    while (true)
+                    {
+                        system("cls");
+                        printf("\n\tQUESTIONARIO: %s", alternativas[escolha]);
+                        printf("\n\n\t");
+                        telainicial(confirmar, alt_3 , 0, 2);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+                        int isenter_3 = 0;
+                        isenter_3= retornar_selecao(p_confirmar, 2);
+                        if ((isenter_3 == 1) && (confirmar == 0)){
+                            responderquestionario(escolha);
+                        }
+                        if ((isenter_3 == 1) && (confirmar == 1)){
+                            break;
+                        }
+                    }
                 }
 
-                if ((isenter_2 == 1) && (confirmar == 1)){
+                if ((isenter_2 == 1) && (escolha_obra == num_op_obras-1)){
                     break;
                 }
             }
