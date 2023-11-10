@@ -32,9 +32,9 @@
 
 // 	    !resumo de vendas
 // 	    !credenciais
-// 	    ?confirmaï¿½ï¿½o de pagamento
-// 	    opï¿½ï¿½o de sair do questionario
-// 	    opï¿½ï¿½o de sair da validaï¿½ao
+// 	    ?confirmação de pagamento
+// 	    opção de sair do questionario
+// 	    opção de sair da validaçao
 
 
 void telainicial(int escolha, char* alternativas, int orientacao, int num_op);
@@ -52,8 +52,6 @@ char* horaAtual();
 void lerarquivo();
 void lerarquivoevalidar();
 void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]);
-int calcularTrimestre(const char *data_hora);
-
 
 int main(){
     
@@ -89,8 +87,8 @@ void telainicial(int escolha, char *alternativas, int orientacao, int num_op){
 
     
     char opcoes[NUM_OP][T_PONT];
-    char *p = &opcoes[0][0]; //aponta para o endereï¿½o de memï¿½ria opcoes[0][0]
-    opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de seleï¿½ï¿½o (onde ï¿½ "--->" e onde ï¿½ "    " )
+    char *p = &opcoes[0][0]; //aponta para o endereço de memória opcoes[0][0]
+    opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de seleção (onde é "--->" e onde é "    " )
     
 
         int cont=0;
@@ -131,7 +129,7 @@ int retornar_selecao(int *p_escolha, int num_op){
         while (loop == true){
 
             if (kbhit()) { // verifica se alguma tecla foi precionada
-                teclapressionada = getch(); // Lï¿½ a tecla pressionada
+                teclapressionada = getch(); // Lê a tecla pressionada
                 if (teclapressionada == -32) {
 
                     teclapressionada = getch();
@@ -285,7 +283,7 @@ double codigoID() {
     // Converter o tempo atual em uma estrutura de tm
     info_tempo = localtime(&hora_atual);
 
-    // Calcular o nï¿½mero inteiro no formato "%y%m%d%H%M%S"
+    // Calcular o número inteiro no formato "%y%m%d%H%M%S"
     double codigo = ((info_tempo->tm_year % 100) * 10000000000) +
                             ((info_tempo->tm_mon + 1)    * 100000000) +
                             (info_tempo->tm_mday         * 1000000) +
@@ -341,7 +339,7 @@ void lerarquivo(){
 void lerarquivoevalidar() {
     
     char ticket_validar[13];
-    printf("Digite o nï¿½ do ticket para validar: ");
+    printf("Digite o nº do ticket para validar: ");
     scanf("%s", ticket_validar);
     
     FILE *arquivo;
@@ -599,100 +597,13 @@ void acessarObras(){
     }
 }
 
-int calcularTrimestre(const char *data_hora) {
-    int dia, mes, ano, hora, minuto, segundo;
-    if (sscanf(data_hora, "%d/%d/%d %d:%d:%d", &dia, &mes, &ano, &hora, &minuto, &segundo) == 6) {
-        // Calcula o trimestre do ano
-        int trimestre = (mes - 1) / 3 + 1;
-        return trimestre;
-    }
-    
-    // Se a anÃ¡lise da data falhar, retorne -1 para indicar um erro
-    return -1;
-}
-
-void resumoVendas() {
+void resumoVendas(){//Fazer
     system("cls");
     printf("RESUMO DE VENDAS:\n\n\n");
-    
-    FILE *arquivo;
-    arquivo = fopen(CAM_TICKETS, "r");
-
-    char matriz[100][4][30];
-    int linhas = 0;
-
-    if (arquivo != NULL) 
-    {
-        char *m1;
-        char *m2;
-        char *m3;
-        char *m4;
-
-        do
-        {
-            m1 = matriz[linhas][0];
-            m2 = matriz[linhas][1];
-            m3 = matriz[linhas][2];
-            m4 = matriz[linhas][3];
-            linhas++;
-
-        } while(fscanf(arquivo, "%[^;];%[^;];%[^;];%[^\n]\n", m1, m2, m3, m4) != EOF);
-
-        fclose(arquivo);
-        printf("\n");
-    }
-    else{
-        printf("Erro ao abrir o arquivo.\n");
-        system("pause");
-        return;
-    }
-
-    struct Ingresso {
-        char codigo[30];
-        char tipo[30];
-        char data_hora[30];
-    };
-
-    // Converta a matriz de strings para uma matriz de ingressos
-    struct Ingresso ingressos[linhas];
-    for (int i = 0; i < linhas; i++) {
-        strcpy(ingressos[i].codigo, matriz[i][0]);
-        strcpy(ingressos[i].tipo, matriz[i][2]);
-        strcpy(ingressos[i].data_hora, matriz[i][3]);
-    }
-
-    // Aqui vocÃª pode calcular a somatÃ³ria a cada 3 meses para cada tipo de ingresso
-    int somatoria_trimestre_I[4] = {0, 0, 0, 0}; // Para cada trimestre do ano (4 trimestres)
-    int somatoria_trimestre_X[4] = {0, 0, 0, 0};
-    int somatoria_trimestre_M[4] = {0, 0, 0, 0};
-
-    for (int i = 0; i < linhas; i++) {
-        char *data_hora = ingressos[i].data_hora;
-        int trimestre = calcularTrimestre(data_hora);
-
-        if (trimestre != -1) {
-            if (strcmp(ingressos[i].tipo, "I") == 0) {
-                somatoria_trimestre_I[trimestre - 1] += 1;
-            } else if (strcmp(ingressos[i].tipo, "X") == 0) {
-                somatoria_trimestre_X[trimestre - 1] += 1;
-            } else if (strcmp(ingressos[i].tipo, "M") == 0) {
-                somatoria_trimestre_M[trimestre - 1] += 1;
-            }
-        }
-    }
-
-    printf("Somatoria a cada 3 meses:\n");
-    for (int t = 0; t < 4; t++) {
-        printf("Trimestre %d - Tipo I: %d, Tipo X: %d, Tipo M: %d\n", t + 1, somatoria_trimestre_I[t], somatoria_trimestre_X[t], somatoria_trimestre_M[t]);
-    }
-
-   printf("\n\n\t\t\t--->Voltar");
-   getch();
-    
-
-   }
-
-
+    lerarquivo();
+    printf("\n\n\n");
+    system("pause");
+}
 
 void responderquestionario(int arquivo) {
 
