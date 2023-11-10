@@ -45,6 +45,7 @@ char*** lerarquivo(const char* filepath, int* numRows, int* numCols) {
         fgets(buffer, sizeof(buffer), file);
         char* token = strtok(buffer, ";");
         for (int j = 0; j < *numCols; j++) {
+            token[strcspn(token, "\n")] = '\0'; // Remove o '\n' se estiver presente
             strcpy(matriz[i][j], token);
             token = strtok(NULL, ";");
         }
@@ -68,9 +69,7 @@ void printarquivo(char*** matriz, int numRows, int numCols) {
 
 
 
-void telainicial(int escolha, char *alternativas, int orientacao, int num_op){
-
-    
+void telainicial(int escolha, char *alternativas, int orientacao, int num_op){    
     char opcoes[NUM_OP][T_PONT];
     char *p = &opcoes[0][0]; //aponta para o endere�o de mem�ria opcoes[0][0]
     opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de sele��o (onde � "--->" e onde � "    " )
@@ -88,7 +87,7 @@ void telainicial(int escolha, char *alternativas, int orientacao, int num_op){
                 printf("%c", p[cont]);
                 cont++;
             }
-          
+        
             while (*alternativas!='\0')
             {
                 printf("%c", *alternativas);
@@ -106,6 +105,17 @@ void telainicial(int escolha, char *alternativas, int orientacao, int num_op){
 
         }
 }
+
+void telainicial2(int escolha, char *alternativas[], int orientacao, int num_op) {
+    char opcoes[NUM_OP][T_PONT];
+    char *p = &opcoes[0][0];
+    opcao(escolha, p, num_op);
+
+    for (int i = 0; i < num_op; i++) {
+        printf("%s%s\n", opcoes[i], alternativas[i]);
+    }
+}
+
 
 int retornar_selecao(int *p_escolha, int num_op){
     

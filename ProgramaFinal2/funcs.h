@@ -45,6 +45,7 @@ void printarquivo(char*** matriz, int numRows, int numCols);
 
 
 void telainicial(int escolha, char* alternativas, int orientacao, int num_op);
+void telainicial2(int escolha, char *alternativas[], int orientacao, int num_op);
 char* opcao(int e, char *ponteiro, int num_op);
 int retornar_selecao(int *p_escolha, int num_op);
 void salvarCompra(int obra, int meiaouinteira);

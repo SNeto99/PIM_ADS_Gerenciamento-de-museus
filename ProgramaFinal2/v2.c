@@ -9,11 +9,10 @@ void venderBilhetes();
 void validarBilhetes();
 void acessarObras();
 void resumoVendas();
-void responderquestionario(int arquivo);
 #define true 1
 #define false 0
 
-
+char Obras[20][2][1023];
 
 int main(){
     
@@ -26,47 +25,15 @@ int main(){
     int colunas;
     char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
 
-    // Alocar memória dinamicamente para nomes
-    char **nomes = (char **)malloc((linhas - 1) * sizeof(char *));
-    if (nomes == NULL) {
-        perror("Erro na alocação de memória");
-        exit(EXIT_FAILURE);
-    }
-
-    // Alocar memória dinamicamente para caminhoArquivos
-    char **caminhoArquivos = (char **)malloc((linhas - 1) * sizeof(char *));
-    if (caminhoArquivos == NULL) {
-        perror("Erro na alocação de memória");
-        exit(EXIT_FAILURE);
-    }
-
     for (int i = 1; i < linhas; i++) {
-        nomes[i - 1] = strdup(configs[i][0]);
-        caminhoArquivos[i - 1] = strdup(configs[i][1]);
+        strcpy(Obras[i - 1][0], configs[i][0]);
+        strcpy(Obras[i - 1][1], configs[i][1]);
     }
 
-    // for (int i = 0; i < linhas - 1; i++) {
-    //     printf("Nomes: %s\n", nomes[i]);
-    //     printf("Caminho: %s\n", caminhoArquivos[i]);
-    // }
-
-    // Libere a memória alocada
     for (int i = 0; i < linhas - 1; i++) {
-        free(nomes[i]);
-        free(caminhoArquivos[i]);
+        printf("Nomes: %s\n"  , Obras[i][0]);
+        printf("Caminho: %s\n", Obras[i][1]);
     }
-
-    free(nomes);
-    free(caminhoArquivos);
-
-    // Libere a memória alocada para configs
-    for (int i = 0; i < linhas; i++) {
-        for (int j = 0; j < colunas; j++) {
-            free(configs[i][j]);
-        }
-        free(configs[i]);
-    }
-    free(configs);
 
     system("pause");
 
@@ -96,7 +63,7 @@ void administracao(){
         system("cls");
         printf("\nBem vindo ao Programa de Administracao de Museus\nO que voce deseja fazer?\n\n");
         telainicial(escolha, alt , 1, num_op);  //cria os textos da tela inicial, incluindo aonde esta selecionado
-       
+    
         int isenter = retornar_selecao(p_escolha, num_op);
         if ((isenter == 1) && (escolha == 0)){
             venderBilhetes();
@@ -120,16 +87,24 @@ void administracao(){
 void venderBilhetes(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4,"Voltar"};
-    char *alt = &alternativas[0][0];
+    char alternativas[5][60];// = {OBRA1, OBRA2, OBRA3, OBRA4,"Voltar"};
+    strcpy(alternativas[0], Obras[0][0]);
+    strcpy(alternativas[1], Obras[1][0]);
+    strcpy(alternativas[2], Obras[2][0]);
+    strcpy(alternativas[3], Obras[3][0]);
+    strcpy(alternativas[4], "Voltar");
+
+
+    // char *alt = &alternativas[0][0];
+    char *alt[] = {alternativas[0], alternativas[1], alternativas[2], alternativas[3], alternativas[4]};
     int num_op = 5;
     
     while (true)
     {   
         system("cls");
         printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-        telainicial(escolha, alt , 1, 5);
-       
+        telainicial2(escolha, alt , 1, 5);
+    
         int isenter = retornar_selecao(p_escolha, num_op);
         if (isenter == 1){
             int escolhatipo = 0;
@@ -142,7 +117,7 @@ void venderBilhetes(){
             {   
                 system("cls");
                 printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-                telainicial(escolha, alt , 1, 5);
+                telainicial2(escolha, alt , 1, 5);
                 if (escolha !=4){
                     printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                     telainicial(escolhatipo, moi , 0, 4);
@@ -160,7 +135,7 @@ void venderBilhetes(){
                         {
                             system("cls");
                             printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-                            telainicial(escolha, alt , 1, 5);
+                            telainicial2(escolha, alt , 1, 5);
                             printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                             telainicial(escolhatipo, moi , 0, 4);
 
@@ -356,7 +331,6 @@ void resumoVendas() {
     
 
    }
-
 
 void menuCredencial(int credenciais){
     switch (credenciais)
