@@ -423,6 +423,18 @@ void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], cha
     printf("\n\n\n");
 }
 
+int calcularTrimestre(const char *data_hora) {
+    int dia, mes, ano, hora, minuto, segundo;
+    if (sscanf(data_hora, "%d/%d/%d %d:%d:%d", &dia, &mes, &ano, &hora, &minuto, &segundo) == 6) {
+        // Calcula o trimestre do ano
+        int trimestre = (mes - 1) / 3 + 1;
+        return trimestre;
+    }
+    
+    // Se a análise da data falhar, retorne -1 para indicar um erro
+    return -1;
+}
+
 
 
 void administracao(){
@@ -617,18 +629,6 @@ void acessarObras(){
     }
 }
 
-int calcularTrimestre(const char *data_hora) {
-    int dia, mes, ano, hora, minuto, segundo;
-    if (sscanf(data_hora, "%d/%d/%d %d:%d:%d", &dia, &mes, &ano, &hora, &minuto, &segundo) == 6) {
-        // Calcula o trimestre do ano
-        int trimestre = (mes - 1) / 3 + 1;
-        return trimestre;
-    }
-    
-    // Se a análise da data falhar, retorne -1 para indicar um erro
-    return -1;
-}
-
 void resumoVendas() {
     system("cls");
     printf("RESUMO DE VENDAS:\n\n\n");
@@ -713,7 +713,6 @@ void resumoVendas() {
 
 
 void responderquestionario(int arquivo) {
-
     FILE *arquivoPerguntas;
     FILE *arquivoRespostas;
 
@@ -786,3 +785,6 @@ void responderquestionario(int arquivo) {
     printf("\n\n\n");
     system("pause");
 }
+
+
+//

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CAMINHO "C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\ProgramaFinal\\output\\tickets.csv"
+#define CAMINHO "C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\ProgramaFinal\\tickets.csv"
 
 
 char*** lerarquivo(const char* filepath, int* numRows, int* numCols) {
