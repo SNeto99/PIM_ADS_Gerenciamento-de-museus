@@ -30,6 +30,16 @@
 
 #define CAM_TICKETS "tickets.csv"
 
+
+
+
+
+
+
+
+
+
+
 char*** lerarquivo(const char* filepath, int* numRows, int* numCols);
 void printarquivo(char*** matriz, int numRows, int numCols);
 
@@ -45,5 +55,6 @@ void lerarquivoevalidar();
 void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]);
 int calcularTrimestre(const char *data_hora);
 void responderquestionario(int arquivo);
+void menuCredencial(int credenciais);
 
 #endif

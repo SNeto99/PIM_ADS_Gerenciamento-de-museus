@@ -1,4 +1,5 @@
 #include "funcs.h"
+
 #include <stdio.h>
 
 #define true 1
@@ -490,6 +491,12 @@ void responderquestionario(int arquivo) {
     printf("\n\n\n");
     system("pause");
 }
+
+
+
+
+
+
 
 
 //

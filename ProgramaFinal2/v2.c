@@ -1,5 +1,9 @@
 #include "funcs.h"
 
+//para rodar o código:
+// gcc -o meu_programa v2.c funcs.c
+
+
 void administracao();
 void venderBilhetes();
 void validarBilhetes();
@@ -7,33 +11,73 @@ void acessarObras();
 void resumoVendas();
 void responderquestionario(int arquivo);
 #define true 1
-#define false
+#define false 0
+
 
 
 int main(){
     
     system("chcp 65001 > null");
 
+//  credenciais = lerCredenciais();
     int credenciais = 1;
 
-    switch (credenciais)
-    {
-    case 1:
-        administracao();
-        break;
-    case 2:
-        venderBilhetes();
-        break;
-    case 3:
-        validarBilhetes();
-        break;
-    case 4:
-        acessarObras();
-        break;
-    case 5:
-        resumoVendas();
-        break;
+    int linhas;
+    int colunas;
+    char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
+
+    // Alocar memória dinamicamente para nomes
+    char **nomes = (char **)malloc((linhas - 1) * sizeof(char *));
+    if (nomes == NULL) {
+        perror("Erro na alocação de memória");
+        exit(EXIT_FAILURE);
     }
+
+    // Alocar memória dinamicamente para caminhoArquivos
+    char **caminhoArquivos = (char **)malloc((linhas - 1) * sizeof(char *));
+    if (caminhoArquivos == NULL) {
+        perror("Erro na alocação de memória");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 1; i < linhas; i++) {
+        nomes[i - 1] = strdup(configs[i][0]);
+        caminhoArquivos[i - 1] = strdup(configs[i][1]);
+    }
+
+    // for (int i = 0; i < linhas - 1; i++) {
+    //     printf("Nomes: %s\n", nomes[i]);
+    //     printf("Caminho: %s\n", caminhoArquivos[i]);
+    // }
+
+    // Libere a memória alocada
+    for (int i = 0; i < linhas - 1; i++) {
+        free(nomes[i]);
+        free(caminhoArquivos[i]);
+    }
+
+    free(nomes);
+    free(caminhoArquivos);
+
+    // Libere a memória alocada para configs
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            free(configs[i][j]);
+        }
+        free(configs[i]);
+    }
+    free(configs);
+
+    system("pause");
+
+
+    
+    
+    menuCredencial(credenciais);
+
+
+
+
 
 return 0;
 }
@@ -43,7 +87,7 @@ return 0;
 void administracao(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Questionarios", "Resumo Vendas","Sair"};
+    char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Temas", "Resumo Vendas","Sair"};
     char *alt = &alternativas[0][0];
     int num_op = 5;
     
@@ -312,3 +356,25 @@ void resumoVendas() {
     
 
    }
+
+
+void menuCredencial(int credenciais){
+    switch (credenciais)
+    {
+    case 1:
+        administracao();
+        break;
+    case 2:
+        venderBilhetes();
+        break;
+    case 3:
+        validarBilhetes();
+        break;
+    case 4:
+        acessarObras();
+        break;
+    case 5:
+        resumoVendas();
+        break;
+    }
+}
