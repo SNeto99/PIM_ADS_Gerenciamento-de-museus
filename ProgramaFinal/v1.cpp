@@ -10,22 +10,22 @@
 
 
 #define OBRA1 "Santos Dumont       "
-#define CP_OBRA1 "..\\Questionarios\\questionario_Santos-Dumont.txt"
-#define CR_OBRA1 "..\\Questionarios\\respostas_Santos-Dumont.txt"
+#define CP_OBRA1 "Questionarios\\questionario_Santos-Dumont.txt"
+#define CR_OBRA1 "Questionarios\\respostas_Santos-Dumont.txt"
 
 #define OBRA2 "Arte Moderna        "
-#define CP_OBRA2 "..\\Questionarios\\questionario_Arte-Moderna.txt"
-#define CR_OBRA2 "..\\Questionarios\\respostas_Arte-Moderna.txt"
+#define CP_OBRA2 "Questionarios\\questionario_Arte-Moderna.txt"
+#define CR_OBRA2 "Questionarios\\respostas_Arte-Moderna.txt"
 
 #define OBRA3 "Exploracao Espacial "
-#define CP_OBRA3 "..\\Questionarios\\questionario_Espacial.txt"
-#define CR_OBRA3 "..\\Questionarios\\respostas_Espacial.txt"
+#define CP_OBRA3 "Questionarios\\questionario_Espacial.txt"
+#define CR_OBRA3 "Questionarios\\respostas_Espacial.txt"
 
 #define OBRA4 "Jogos Olimpicos     "
-#define CP_OBRA4 "..\\Questionarios\\questionario_Jogos-Olimpicos.txt"
-#define CR_OBRA4 "..\\Questionarios\\respostas_Jogos-Olimpicos.txt"
+#define CP_OBRA4 "Questionarios\\questionario_Jogos-Olimpicos.txt"
+#define CR_OBRA4 "Questionarios\\respostas_Jogos-Olimpicos.txt"
 
-#define CAM_TICKETS "..\\output\\tickets.csv"
+#define CAM_TICKETS "tickets.csv"
 
 
 //  O que falta:

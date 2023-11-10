@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "funcs.h"
 
-#define CAMINHO "C:\\Users\\netos\\Documents\\Programacao\\C\\PIM_ADS_Gerenciamento-de-museus\\ProgramaFinal\\output\\tickets.csv"
 
 
 char*** lerarquivo(const char* filepath, int* numRows, int* numCols) {
@@ -59,24 +56,6 @@ void printarquivo(char*** matriz, int numRows, int numCols) {
         for (int j = 0; j < numCols; j++) {
             printf("%s\t", matriz[i][j]);
         }
-        printf("\n");
+        // printf("\n");
     }
-}
-
-int main() {
-    int numRows, numCols;
-    char*** matriz = lerarquivo(CAMINHO, &numRows, &numCols);
-    printarquivo(matriz, numRows, numCols);
-
-    // Liberar a memória alocada
-    for (int i = 0; i < numRows; i++) {
-        for (int j = 0; j < numCols; j++) {
-            free(matriz[i][j]);
-        }
-        free(matriz[i]);
-    }
-    free(matriz);
-    printf("\nrows:%i \ncols:%i", numRows, numCols);
-
-    return 0;
 }
