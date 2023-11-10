@@ -12,7 +12,21 @@ void resumoVendas();
 #define true 1
 #define false 0
 
-char Obras[20][2][1023];
+
+
+
+
+
+
+char Temas[N_MAX_TEMAS][2][T_MAX_STR];
+char Obras[N_MAX_TEMAS][2][T_MAX_STR];
+
+int n_temas=0;
+
+// char Obras[N_MAX_TEMAS][N_MAX_OBRAS][][T_MAX_STR];
+// int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
+
+
 
 int main(){
     
@@ -21,19 +35,51 @@ int main(){
 //  credenciais = lerCredenciais();
     int credenciais = 1;
 
-    int linhas;
-    int colunas;
+    int linhas=0;
+    int colunas=0;
     char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
+    n_temas=linhas-1;
 
-    for (int i = 1; i < linhas; i++) {
-        strcpy(Obras[i - 1][0], configs[i][0]);
-        strcpy(Obras[i - 1][1], configs[i][1]);
+    for (int i = 1; i <= n_temas; i++) {
+        strcpy(Temas[i - 1][0], configs[i][0]);
+        strcpy(Temas[i - 1][1], configs[i][1]);
     }
 
-    for (int i = 0; i < linhas - 1; i++) {
+    // for (int i = 0; i <= n_temas - 1; i++) {
+    //     printf("Nomes: %s\n"  , Temas[i][0]);
+    //     printf("Caminho: %s\n", Temas[i][1]);
+    // }
+    // printf("\n\nn_temas=%d\n\n\n",n_temas);
+
+
+    char caminho[255];
+    strcpy(caminho, Temas[0][1]);
+    strcat(caminho, "\\DEFINICOES.csv");
+
+
+    printf("\n\ncaminho defs obra=%s\n\n\n", caminho);
+
+
+    system("pause");
+
+
+
+
+    linhas=0;
+    colunas=0;
+    char ***obras = lerarquivo(caminho, &linhas, &colunas);
+    int n_obras=linhas-1;
+
+    for (int i = 1; i <= n_obras; i++) {
+        strcpy(Obras[i - 1][0], obras[i][0]);
+        strcpy(Obras[i - 1][1], obras[i][1]);
+    }
+
+    for (int i = 0; i <= n_obras - 1; i++) {
         printf("Nomes: %s\n"  , Obras[i][0]);
         printf("Caminho: %s\n", Obras[i][1]);
     }
+    printf("\n\nn_obras=%d\n\n\n",n_obras);
 
     system("pause");
 
@@ -87,16 +133,14 @@ void administracao(){
 void venderBilhetes(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[5][60];// = {OBRA1, OBRA2, OBRA3, OBRA4,"Voltar"};
-    strcpy(alternativas[0], Obras[0][0]);
-    strcpy(alternativas[1], Obras[1][0]);
-    strcpy(alternativas[2], Obras[2][0]);
-    strcpy(alternativas[3], Obras[3][0]);
-    strcpy(alternativas[4], "Voltar");
+    // char alternativas[N_MAX_TEMAS][T_MAX_STR];// = {OBRA1, OBRA2, OBRA3, OBRA4,"Voltar"};
 
-
-    // char *alt = &alternativas[0][0];
-    char *alt[] = {alternativas[0], alternativas[1], alternativas[2], alternativas[3], alternativas[4]};
+    char *alt[N_MAX_TEMAS];
+    for (int i=0; i<n_temas; i++){
+        alt[i]= Temas[i][0];
+    }
+    alt[n_temas] = "Voltar";
+    
     int num_op = 5;
     
     while (true)
@@ -139,7 +183,7 @@ void venderBilhetes(){
                             printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                             telainicial(escolhatipo, moi , 0, 4);
 
-             
+            
                             printf("\n\n\n");
                             telainicial(confirmar, p_escolha_conf, 1, 2);
                             comprado = retornar_selecao(p_confirmar, 2);
@@ -188,15 +232,21 @@ void validarBilhetes(){
 void acessarObras(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4, "Sair"};
+    // char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4, "Sair"};
     int num_op = 5;
-    char *alt = &alternativas[0][0];
+    // char *alt = &alternativas[0][0];
+    char *alt[N_MAX_TEMAS];
+    for (int i=0; i<n_temas; i++){
+        alt[i]= Temas[i][0];
+    }
+    alt[n_temas] = "Voltar";
+    
     
     while (true)
     {   
         system("cls");
         printf("\n\tSELECIONE O TEMA QUE VOCE DESEJA:\n\n");
-        telainicial(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+        telainicial2(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
         int isenter = 0;
         isenter= retornar_selecao(p_escolha, num_op);
         
@@ -207,6 +257,12 @@ void acessarObras(){
             char alternativas_2[][30] = {"obra 1", "obra 2", "obra 3", "obra 4", "obra 5", "Voltar"};
             int num_op_obras = 6;
             char *alt_2 = &alternativas_2[0][0];
+
+
+
+
+
+
             while (true)
             {
                 system("cls");
@@ -224,7 +280,7 @@ void acessarObras(){
                     while (true)
                     {
                         system("cls");
-                        printf("\n\tQUESTIONARIO: %s", alternativas[escolha]);
+                        printf("\n\tQUESTIONARIO: %s", alt[escolha]);
                         printf("\n\n\t");
                         telainicial(confirmar, alt_3 , 0, 2);  //cria os textos da tela inicial, incluindo aonde esta selecionado
                         int isenter_3 = 0;

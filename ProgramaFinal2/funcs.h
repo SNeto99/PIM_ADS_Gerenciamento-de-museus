@@ -10,6 +10,9 @@
 
 #define NUM_OP 6
 #define T_PONT 5 
+#define T_MAX_STR 255
+#define N_MAX_TEMAS 10
+#define N_MAX_OBRAS 10
 
 
 #define OBRA1 "Santos Dumont       "
