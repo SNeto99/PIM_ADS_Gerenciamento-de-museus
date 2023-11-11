@@ -13,8 +13,40 @@ void resumoVendas();
 #define false 0
 
 
+struct Questao
+{
+    char pergunta[T_MAX_STR];
+    char alternativas[10][T_MAX_STR];
+    char resposta;
+};
+
+struct Descricao
+{
+    char nome[T_MAX_STR];
+    char autor[T_MAX_STR];
+    char data[T_MAX_STR];
+    char tipo[T_MAX_STR];
+    char descricao[T_MAX_STR^2];
+
+};
+
+struct Obra
+{
+    char nome[T_MAX_STR];
+    struct Descricao descricao;
+    struct Questao Questoes[N_MAX_QUEST];
+};
+
+struct Tema
+{
+    char nome[T_MAX_STR];
+    char caminho[T_MAX_STR];
+    struct Obra obras[N_MAX_OBRAS];
+};
 
 
+
+struct Tema Temass[N_MAX_TEMAS];
 
 
 
@@ -24,7 +56,7 @@ char Obras[N_MAX_TEMAS][2][T_MAX_STR];
 int n_temas=0;
 
 // char Obras[N_MAX_TEMAS][N_MAX_OBRAS][][T_MAX_STR];
-// int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
+int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
 
 
 
@@ -41,23 +73,18 @@ int main(){
     n_temas=linhas-1;
 
     for (int i = 1; i <= n_temas; i++) {
-        strcpy(Temas[i - 1][0], configs[i][0]);
-        strcpy(Temas[i - 1][1], configs[i][1]);
+        strcpy(Temass[i - 1].nome, configs[i][0]);
+        strcpy(Temass[i - 1].caminho, configs[i][1]);
     }
 
-    // for (int i = 0; i <= n_temas - 1; i++) {
-    //     printf("Nomes: %s\n"  , Temas[i][0]);
-    //     printf("Caminho: %s\n", Temas[i][1]);
-    // }
-    // printf("\n\nn_temas=%d\n\n\n",n_temas);
-
-
-    char caminho[255];
-    strcpy(caminho, Temas[0][1]);
+    char caminho[T_MAX_STR];
+    strcpy(caminho, Temass[0].caminho);
     strcat(caminho, "\\DEFINICOES.csv");
-
-
     printf("\n\ncaminho defs obra=%s\n\n\n", caminho);
+
+
+    
+
 
 
     system("pause");
@@ -137,7 +164,7 @@ void venderBilhetes(){
 
     char *alt[N_MAX_TEMAS];
     for (int i=0; i<n_temas; i++){
-        alt[i]= Temas[i][0];
+        alt[i]= Temass[i].nome;
     }
     alt[n_temas] = "Voltar";
     
@@ -224,7 +251,24 @@ void validarBilhetes(){
     system("cls");
     printf("MENU DE VALIDACAO DE BILHETES:\n\n\n");
 
-    lerarquivoevalidar();
+    char ticket_validar[13];
+    printf("Digite o nº do ticket para validar: ");
+    scanf("%s", ticket_validar);
+    
+    int nlinhas, ncolunas;
+    char ***tickets = lerarquivo("tickets.csv",&nlinhas, &ncolunas); 
+
+    for (int i=0; i<nlinhas-1; i++){
+        if (strcmp(tickets[i][0], ticket_validar) == 0)
+        {
+            printf("\nTicket validado:\n\n");
+            ticket(tickets[i][1], *tickets[i][2], tickets[i][0], tickets[i][3]);
+            break;
+        }
+        
+    }
+   
+
 
     system("pause");
 }
@@ -232,14 +276,15 @@ void validarBilhetes(){
 void acessarObras(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    // char alternativas[][30] = {OBRA1, OBRA2, OBRA3, OBRA4, "Sair"};
     int num_op = 5;
-    // char *alt = &alternativas[0][0];
     char *alt[N_MAX_TEMAS];
     for (int i=0; i<n_temas; i++){
-        alt[i]= Temas[i][0];
+        alt[i]= Temass[i].nome;
     }
     alt[n_temas] = "Voltar";
+
+
+
     
     
     while (true)

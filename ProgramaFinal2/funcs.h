@@ -13,6 +13,8 @@
 #define T_MAX_STR 255
 #define N_MAX_TEMAS 10
 #define N_MAX_OBRAS 10
+#define N_MAX_QUEST 10
+
 
 
 #define OBRA1 "Santos Dumont       "
@@ -54,8 +56,6 @@ int retornar_selecao(int *p_escolha, int num_op);
 void salvarCompra(int obra, int meiaouinteira);
 double codigoID();
 char* horaAtual();
-// void lerarquivo();
-void lerarquivoevalidar();
 void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]);
 int calcularTrimestre(const char *data_hora);
 void responderquestionario(int arquivo);
