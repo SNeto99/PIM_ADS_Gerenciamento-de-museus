@@ -35,12 +35,13 @@ struct Obra
     char nome[T_MAX_STR];
     struct Descricao descricao;
     struct Questao Questoes[N_MAX_QUEST];
+    char caminho_quest[T_MAX_STR];
 };
 
 struct Tema
 {
     char nome[T_MAX_STR];
-    char caminho[T_MAX_STR];
+    char caminho_defs[T_MAX_STR];
     struct Obra obras[N_MAX_OBRAS];
 };
 
@@ -54,9 +55,10 @@ char Temas[N_MAX_TEMAS][2][T_MAX_STR];
 char Obras[N_MAX_TEMAS][2][T_MAX_STR];
 
 int n_temas=0;
+int n_obras=0;
 
 // char Obras[N_MAX_TEMAS][N_MAX_OBRAS][][T_MAX_STR];
-int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
+// int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
 
 
 
@@ -72,45 +74,37 @@ int main(){
     char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
     n_temas=linhas-1;
 
-    for (int i = 1; i <= n_temas; i++) {
+    for (int i = 1; i < linhas; i++) {
         strcpy(Temass[i - 1].nome, configs[i][0]);
-        strcpy(Temass[i - 1].caminho, configs[i][1]);
+        strcpy(Temass[i - 1].caminho_defs, configs[i][1]);
+        strcat(Temass[i - 1].caminho_defs, "\\DEFINICOES.csv");
     }
-
-    char caminho[T_MAX_STR];
-    strcpy(caminho, Temass[0].caminho);
-    strcat(caminho, "\\DEFINICOES.csv");
-    printf("\n\ncaminho defs obra=%s\n\n\n", caminho);
+    printf("\n\ncaminho defs obra=%s\n\n\n", Temass[0].caminho_defs);
+    system("pause");
 
 
     
+    for (int i=0;i<n_temas;i++)
+    {
+        linhas=0;
+        colunas=0;
+        char ***def_obras = lerarquivo(Temass[i].caminho_defs, &linhas, &colunas);
+        n_obras=+linhas-1;
 
+        for (int j = 1; j < linhas; j++) {
+            strcpy(Temass[i - 1].obras[i - 1].nome         , def_obras[j][0]);
+            strcpy(Temass[i - 1].obras[i - 1].caminho_quest, def_obras[j][1]);
+        }
 
+        for (int j = 0; j < linhas; j++) {
+            printf("Nomes: %s\n"  , Temass[i].obras[j].nome);
+            printf("Caminho: %s\n", Temass[i].obras[j].caminho_quest);
+        }
+
+    }
+        printf("\n\nn_obras=%d\n\n\n",n_obras);
 
     system("pause");
-
-
-
-
-    linhas=0;
-    colunas=0;
-    char ***obras = lerarquivo(caminho, &linhas, &colunas);
-    int n_obras=linhas-1;
-
-    for (int i = 1; i <= n_obras; i++) {
-        strcpy(Obras[i - 1][0], obras[i][0]);
-        strcpy(Obras[i - 1][1], obras[i][1]);
-    }
-
-    for (int i = 0; i <= n_obras - 1; i++) {
-        printf("Nomes: %s\n"  , Obras[i][0]);
-        printf("Caminho: %s\n", Obras[i][1]);
-    }
-    printf("\n\nn_obras=%d\n\n\n",n_obras);
-
-    system("pause");
-
-
     
     
     menuCredencial(credenciais);
@@ -388,12 +382,12 @@ void resumoVendas() {
         return;
     }
 
-    struct Ingresso {
-        char codigo[30];
-        char tipo[30];
-        char data_hora[30];
+    struct Ingresso{
+        char codigo[T_MAX_STR];
+        char nome[T_MAX_STR];
+        char tipo[T_MAX_STR];
+        char data_hora[T_MAX_STR];
     };
-
     // Converta a matriz de strings para uma matriz de ingressos
     struct Ingresso ingressos[linhas];
     for (int i = 0; i < linhas; i++) {

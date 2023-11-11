@@ -1,6 +1,6 @@
-"nome                 ";"caminho da pasta com os arquivos"
-"Abaporu              ";""
-"A Negra              ";""
-"O Lavrador de Café   ";""
-"Antropofagia         ";""
-"Manifesto Antropofago";""
+nome                 ;caminho do questionario
+Abaporu              ;Temas\t1\Questionarios\q-abaporu.txt
+A Negra              ;Temas\t1\Questionarios\q-a negra.txt
+O Lavrador de Café   ;Temas\t1\Questionarios\q-o lavrador.txt
+Antropofagia         ;Temas\t1\Questionarios\q-antropofagia.txt
+Manifesto Antropofago;Temas\t1\Questionarios\q-manifesto.txt

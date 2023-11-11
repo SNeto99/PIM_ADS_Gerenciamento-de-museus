@@ -124,7 +124,7 @@ int retornar_selecao(int *p_escolha, int num_op){
         while (loop == true){
 
             if (kbhit()) { // verifica se alguma tecla foi precionada
-                teclapressionada = getch(); // L� a tecla pressionada
+                teclapressionada = getch(); // Le a tecla pressionada
                 if (teclapressionada == -32) {
 
                     teclapressionada = getch();
