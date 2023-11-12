@@ -37,15 +37,11 @@
 
 #define CAM_TICKETS "tickets.csv"
 
-<<<<<<< Updated upstream
-=======
 
 #define true 1
 #define false 0
 
 #define N_ALTERNATIVAS 4
->>>>>>> Stashed changes
-
 
 
 

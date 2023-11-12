@@ -7,13 +7,12 @@
 //!Fazer:
 // descriçao das obras
 // comentar o código
-// adicionar mais questões
 // tratamento de erros
 // help()
 
 
 
-void listarNomesArquivosCSV2(const char *caminho, char ***nomesArquivos, int *numArquivos) {
+void listarNomesArquivosCSV(const char *caminho, char ***nomesArquivos, int *numArquivos) {
     DIR *dir;
     struct dirent *entrada;
     int numArq = 0;
@@ -104,72 +103,46 @@ int main(int argc, char *argv[]){
         credenciais=atoi(arquivo_credenciais[0][1]);
     }
 
-    // int linhas=0;
-    // int colunas=0;
-    // char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
-    // n_temas=linhas-1;
-
-    const char *caminho = "Temas/";  // Substitua pelo caminho da sua pasta
+    char caminho[] = PASTA_TEMAS;  // Substitua pelo caminho da sua pasta
     char **nomesPastas;
     int numPastas;
 
     listarNomesPastas(caminho, &nomesPastas, &numPastas);
 
     n_temas=numPastas;
-    // printf("Nomes dos arquivos CSV na pasta '%s':\n", caminho);
     for (int i = 0; i < numPastas; i++) {
-        // printf("%s\n", nomesPastas[i]);
         strcpy(Temass[i].nome, nomesPastas[i]);
-        strcpy(Temass[i].caminho_defs, nomesPastas[i]);
+
+        strcpy(Temass[i].caminho_defs, PASTA_TEMAS);  
+        strcat(Temass[i].caminho_defs, nomesPastas[i]);
+        strcat(Temass[i].caminho_defs, "/");  
+        printf("\n%s\t", Temass[i].caminho_defs);
+
         free(nomesPastas[i]);
     }
     free(nomesPastas);
 
-    printf("\n\n\n");
-    // for (int i = 1; i < linhas; i++) {
-    //     strcpy(Temass[i - 1].nome, configs[i][0]);
-    //     strcpy(Temass[i - 1].caminho_defs, configs[i][1]);
-    //     strcat(Temass[i - 1].caminho_defs, "\\CONFIGS.csv");
-    // }
-    
     for (int i=0;i<n_temas;i++)
     {
-        char caminho[T_MAX_STR*2] = "Temas/";
-        strcat(caminho, Temass[i].caminho_defs);  // Substitua pelo caminho da sua pasta
         char **nomesPastas2;
         int numPastas2=0;
 
-
-    // printf("caminho:%s", caminho);
-        listarNomesPastas(caminho, &nomesPastas2, &numPastas2);
-        // printf("Nomes dos arquivos CSV na pasta '%s':\n", caminho);
+        listarNomesPastas(Temass[i].caminho_defs, &nomesPastas2, &numPastas2);
+        Temass[i].n_obras=numPastas2;
+      
         for (int j = 0; j < numPastas2; j++) {
-            // printf("%s\n", nomesPastas2[j]);
             strcpy(Temass[i].obras[j].nome, nomesPastas2[j]);
-            strcpy(Temass[i].obras[j].caminho_quest, nomesPastas2[j]);
+            strcpy(Temass[i].obras[j].caminho_quest, Temass[i].caminho_defs);
+            strcat(Temass[i].obras[j].caminho_quest, nomesPastas2[j]);
+            strcat(Temass[i].obras[j].caminho_quest, "/");  
+
+            printf("\n%s\t", Temass[i].obras[j].caminho_quest);
+
             free(nomesPastas2[j]);
         }
         free(nomesPastas2);
-        Temass[i].n_obras=numPastas2;
-
-        // linhas=0;
-        // colunas=0;
-        // char ***def_obras = lerarquivo(Temass[i].caminho_defs, &linhas, &colunas);
-        // int n_obras_tema=linhas-1;
-
-        // for (int j = 1; j < linhas; j++) {
-        //     strcpy(Temass[i].obras[j - 1].nome         , def_obras[j][0]);
-        //     strcpy(Temass[i].obras[j - 1].caminho_quest, def_obras[j][1]);
-        // }
-
-
-        // n_obras_total=n_obras_total + n_obras_tema;
-        // Temass[i].n_obras=n_obras_tema;
     }
-
-
-    
-    // system("pause");
+   
     menuCredencial(credenciais);
 
 return 0;
@@ -177,7 +150,8 @@ return 0;
 
 
 
-void administracao(){
+void administracao()
+{
     int escolha = 0;
     int *p_escolha = &escolha;
     char alternativas[][30] = {"Vender Bilhetes", "Validar Bilhetes", "Acessar Temas", "Resumo Vendas","Ajuda","Sair"};
@@ -214,7 +188,8 @@ void administracao(){
     }
 }
 
-void venderBilhetes(){
+void venderBilhetes()
+{
     int escolha = 0;
     int *p_escolha = &escolha;
 
@@ -309,7 +284,8 @@ void venderBilhetes(){
     }
 }
 
-void validarBilhetes(){
+void validarBilhetes()
+{
     while (true)
     {
         system("cls");
@@ -352,7 +328,8 @@ void validarBilhetes(){
     }
 }
 
-void acessarObras(){
+void acessarObras()
+{
  
     int escolha = 0;
     int *p_escolha = &escolha;
@@ -382,46 +359,19 @@ void acessarObras(){
         
         if ((isenter)&&(escolha != n_temas))
         {
-            // printf("\nn_obras=%d\n", Temass[escolha].n_obras);
-            //     system("pause");
 
             for (int i=0;i<Temass[escolha].n_obras;i++)
             {
-                char caminho[T_MAX_STR*2]="Temas/";
-                // printf("\ncaminho123:%s", caminho);
-
-                strcat(caminho, Temass[escolha].caminho_defs);
-                // printf("\ncaminho123:%s", caminho);
-
-                strcat(caminho, "/");  
-                // printf("\ncaminho123:%s", caminho);
-
-                strcat(caminho, Temass[escolha].obras[i].caminho_quest);  
-                // printf("\ncaminho123:%s", caminho);
-                
-                strcat(caminho, "/");  
-                // printf("\ncaminho123:%s", caminho);
-
-                // strcat(caminho, ".txt");  
-                // printf("\ncaminho123:%s", caminho);
-
-                strcpy(Temass[escolha].obras[i].caminho_quest, caminho);
-                
-
                 char **nomesArquivos;
                 int numArquivos;
 
-                // printf("\ncaminho123:%s\n", caminho);
-                listarNomesArquivosCSV2(caminho, &nomesArquivos, &numArquivos);
+                listarNomesArquivosCSV(Temass[escolha].obras[i].caminho_quest, &nomesArquivos, &numArquivos);
                 for (int j = 0; j < numArquivos; j++) {
-                    // printf("%s\n", nomesArquivos[escolha]);
                     strcat(Temass[escolha].obras[i].caminho_quest, nomesArquivos[j]);
-                    // free(nomesArquivos[j]);
+                    free(nomesArquivos[j]);
                 }
-                // free(nomesArquivos);
+                free(nomesArquivos);
             }
-                // printf("\nNomes dos arquivos CSV na pasta '%s':\n", Temass[escolha].caminho_defs);
-                // system("pause");
 
             int escolha_obra = 0;
             int *p_escolha_obra = &escolha_obra;
@@ -478,7 +428,8 @@ void acessarObras(){
     }
 }
 
-void resumoVendas() {
+void resumoVendas() 
+{
     system("cls");
 
     int linhas=0;
@@ -544,7 +495,8 @@ void resumoVendas() {
 
    }
 
-void ajuda(){
+void ajuda()
+{
     system("cls");
     printf("\n");
     for (int i=0; i<n_temas;i++){

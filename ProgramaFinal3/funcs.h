@@ -17,6 +17,8 @@
 
 #define CAM_CREDENCIAL "credenciais.txt"
 #define CAM_TICKETS "tickets.csv"
+#define PASTA_TEMAS "Temas/"
+
 
 #define true 1
 #define false 0
