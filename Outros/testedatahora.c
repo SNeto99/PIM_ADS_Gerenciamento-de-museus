@@ -39,19 +39,19 @@ int diferencaDias(struct Date date1, struct Date date2) {
 }
 
 int main() {
-    // struct Date date1 = {2022, 11, 9};
-    // struct Date date2 = {2023, 11, 20};
+    struct Date date1 = {2022, 11, 9};
+    struct Date date2 = {2023, 11, 20};
 
 
     double codigo = 231111013159;
-    struct Date datecodigo = {abs(codigo / 10^10), (abs(codigo / 10^8)%100), (abs(codigo/10^6)%100)};
+    struct Date datecodigo = {(codigo / 10^10), ((codigo / 10^8)%100), ((codigo/10^6)%100)};
 
     
     struct Date datehoje = {2023, 11, 11};
 
 
 
-    int diff = diferencaDias(datecodigo, datehoje);
+    int diff = diferencaDias(date1, date2);
 
     printf("Diferenca em dias: %d\n", diff);
 

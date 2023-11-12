@@ -9,15 +9,26 @@ void venderBilhetes();
 void validarBilhetes();
 void acessarObras();
 void resumoVendas();
+void responderquestionario(int tema, int obra);
+
 #define true 1
 #define false 0
 
+#define N_ALTERNATIVAS 4
+
+
+struct Ingresso {
+    char codigo[30];
+    char nome[T_MAX_STR];
+    char tipo[30];
+    char data_hora[50];
+};
 
 struct Questao
 {
-    char pergunta[T_MAX_STR];
+    char pergunta[T_MAX_STR^2];
     char alternativas[10][T_MAX_STR];
-    char resposta;
+    char resposta[10];
 };
 
 struct Descricao
@@ -26,7 +37,7 @@ struct Descricao
     char autor[T_MAX_STR];
     char data[T_MAX_STR];
     char tipo[T_MAX_STR];
-    char descricao[T_MAX_STR^2];
+    char descricao[T_MAX_STR^3];
 
 };
 
@@ -35,14 +46,16 @@ struct Obra
     char nome[T_MAX_STR];
     struct Descricao descricao;
     struct Questao Questoes[N_MAX_QUEST];
-    char caminho_quest[T_MAX_STR];
+    char caminho_quest[T_MAX_STR*2];
+    int n_questoes;
 };
 
 struct Tema
 {
     char nome[T_MAX_STR];
-    char caminho_defs[T_MAX_STR];
+    char caminho_defs[T_MAX_STR*2];
     struct Obra obras[N_MAX_OBRAS];
+    int n_obras;
 };
 
 
@@ -55,7 +68,7 @@ char Temas[N_MAX_TEMAS][2][T_MAX_STR];
 char Obras[N_MAX_TEMAS][2][T_MAX_STR];
 
 int n_temas=0;
-int n_obras=0;
+int n_obras_total=0;
 
 // char Obras[N_MAX_TEMAS][N_MAX_OBRAS][][T_MAX_STR];
 // int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
@@ -71,16 +84,20 @@ int main(){
 
     int linhas=0;
     int colunas=0;
+printf("debug");
     char ***configs = lerarquivo("Temas\\CONFIGS.csv", &linhas, &colunas);
     n_temas=linhas-1;
 
+    printf("\n\n\n");
     for (int i = 1; i < linhas; i++) {
         strcpy(Temass[i - 1].nome, configs[i][0]);
         strcpy(Temass[i - 1].caminho_defs, configs[i][1]);
-        strcat(Temass[i - 1].caminho_defs, "\\DEFINICOES.csv");
+        strcat(Temass[i - 1].caminho_defs, "\\CONFIGS.csv");
+        // printf("caminho das definicoes dos Temas=%s\n", Temass[i-1].caminho_defs);
     }
-    printf("\n\ncaminho defs obra=%s\n\n\n", Temass[0].caminho_defs);
-    system("pause");
+    // printf("numero de temas: %d\n\n\n\n", n_temas);
+
+    // system("pause");
 
 
     
@@ -88,23 +105,28 @@ int main(){
     {
         linhas=0;
         colunas=0;
+        // printf("\n\ncaminho das definicoes das Obras=%s\n\n", Temass[i].caminho_defs);
+    printf("debug2");
         char ***def_obras = lerarquivo(Temass[i].caminho_defs, &linhas, &colunas);
-        n_obras=+linhas-1;
+        int n_obras_tema=linhas-1;
 
         for (int j = 1; j < linhas; j++) {
-            strcpy(Temass[i - 1].obras[i - 1].nome         , def_obras[j][0]);
-            strcpy(Temass[i - 1].obras[i - 1].caminho_quest, def_obras[j][1]);
+            strcpy(Temass[i].obras[j - 1].nome         , def_obras[j][0]);
+            strcpy(Temass[i].obras[j - 1].caminho_quest, def_obras[j][1]);
         }
 
-        for (int j = 0; j < linhas; j++) {
-            printf("Nomes: %s\n"  , Temass[i].obras[j].nome);
-            printf("Caminho: %s\n", Temass[i].obras[j].caminho_quest);
-        }
+        // for (int j = 0; j < n_obras_tema; j++) {
+        //     printf("Nomes: %s\n"  , Temass[i].obras[j].nome);
+        //     printf("Caminho: %s\n", Temass[i].obras[j].caminho_quest);
+        // }
 
+        n_obras_total=n_obras_total + n_obras_tema;
+        Temass[i].n_obras=n_obras_tema;
     }
-        printf("\n\nn_obras=%d\n\n\n",n_obras);
+        // printf("\n\nn_obras_total=%d\n\n\n", n_obras_total);
 
-    system("pause");
+
+    // system("pause");
     
     
     menuCredencial(credenciais);
@@ -162,15 +184,15 @@ void venderBilhetes(){
     }
     alt[n_temas] = "Voltar";
     
-    int num_op = 5;
+    // int num_op = 5;
     
     while (true)
     {   
         system("cls");
         printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-        telainicial2(escolha, alt , 1, 5);
+        telainicial2(escolha, alt , 1, n_temas+1);
     
-        int isenter = retornar_selecao(p_escolha, num_op);
+        int isenter = retornar_selecao(p_escolha, n_temas+1);
         if (isenter == 1){
             int escolhatipo = 0;
             int *p_escolhatipo = &escolhatipo;
@@ -182,8 +204,8 @@ void venderBilhetes(){
             {   
                 system("cls");
                 printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-                telainicial2(escolha, alt , 1, 5);
-                if (escolha !=4){
+                telainicial2(escolha, alt , 1, n_temas+1);
+                if (escolha !=n_temas){
                     printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                     telainicial(escolhatipo, moi , 0, 4);
                     int isinteira = retornar_selecao(p_escolhatipo, 4);
@@ -200,7 +222,7 @@ void venderBilhetes(){
                         {
                             system("cls");
                             printf("\n\tSELECIONE QUAL OBRA VOCE DESEJA COMPRAR:\n\n");
-                            telainicial2(escolha, alt , 1, 5);
+                            telainicial2(escolha, alt , 1, n_temas+1);
                             printf("\nSELECIONE O TIPO DE INGRESSO:\n\n");
                             telainicial(escolhatipo, moi , 0, 4);
 
@@ -234,7 +256,7 @@ void venderBilhetes(){
             }
             
         }
-        if ((isenter == 1) && (escolha == 4)){
+        if ((isenter == 1) && (escolha == n_temas)){
             printf("\n\n");
             break;
         }
@@ -270,43 +292,39 @@ void validarBilhetes(){
 void acessarObras(){
     int escolha = 0;
     int *p_escolha = &escolha;
-    int num_op = 5;
     char *alt[N_MAX_TEMAS];
     for (int i=0; i<n_temas; i++){
         alt[i]= Temass[i].nome;
     }
     alt[n_temas] = "Voltar";
 
-
-
-    
     
     while (true)
     {   
         system("cls");
         printf("\n\tSELECIONE O TEMA QUE VOCE DESEJA:\n\n");
-        telainicial2(escolha, alt , 1, 5);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+        telainicial2(escolha, alt , 1, n_temas+1);  //cria os textos da tela inicial, incluindo aonde esta selecionado
         int isenter = 0;
-        isenter= retornar_selecao(p_escolha, num_op);
+        isenter= retornar_selecao(p_escolha, n_temas+1);
         
-        if ((isenter)&&(escolha != 4))
+        if ((isenter)&&(escolha != n_temas))
         {
             int escolha_obra = 0;
             int *p_escolha_obra = &escolha_obra;
-            char alternativas_2[][30] = {"obra 1", "obra 2", "obra 3", "obra 4", "obra 5", "Voltar"};
-            int num_op_obras = 6;
-            char *alt_2 = &alternativas_2[0][0];
+            int num_op_obras = Temass[escolha].n_obras+1;
 
-
-
-
+            char *alt_2[N_MAX_OBRAS];
+            for (int i=0; i<Temass[escolha].n_obras; i++){
+                alt_2[i]= Temass[escolha].obras[i].nome;
+            }
+            alt_2[Temass[escolha].n_obras] = "Voltar";
 
 
             while (true)
             {
                 system("cls");
                 printf("\n\tSELECIONE A OBRA QUE VOCE DESEJA:\n\n");
-                telainicial(escolha_obra, alt_2 , 1, num_op_obras);  //cria os textos da tela inicial, incluindo aonde esta selecionado
+                telainicial2(escolha_obra, alt_2 , 1, num_op_obras);  //cria os textos da tela inicial, incluindo aonde esta selecionado
                 int isenter_2 = 0;
                 isenter_2= retornar_selecao(p_escolha_obra, num_op_obras);
 
@@ -325,7 +343,7 @@ void acessarObras(){
                         int isenter_3 = 0;
                         isenter_3= retornar_selecao(p_confirmar, 2);
                         if ((isenter_3 == 1) && (confirmar == 0)){
-                            responderquestionario(escolha);
+                            responderquestionario(escolha, escolha_obra);
                         }
                         if ((isenter_3 == 1) && (confirmar == 1)){
                             break;
@@ -339,7 +357,7 @@ void acessarObras(){
             }
         }
         
-        if ((isenter) && (escolha == 4)){
+        if ((isenter) && (escolha == n_temas)){
             printf("\n\n");
             break;
         }
@@ -348,56 +366,24 @@ void acessarObras(){
 
 void resumoVendas() {
     system("cls");
-    printf("RESUMO DE VENDAS:\n\n\n");
+
+    int linhas=0;
+    int colunas=0;
+    char ***configs = lerarquivo("tickets.csv", &linhas, &colunas);
     
-    FILE *arquivo;
-    arquivo = fopen(CAM_TICKETS, "r");
-
-    char matriz[100][4][30];
-    int linhas = 0;
-
-    if (arquivo != NULL) 
-    {
-        char *m1;
-        char *m2;
-        char *m3;
-        char *m4;
-
-        do
-        {
-            m1 = matriz[linhas][0];
-            m2 = matriz[linhas][1];
-            m3 = matriz[linhas][2];
-            m4 = matriz[linhas][3];
-            linhas++;
-
-        } while(fscanf(arquivo, "%[^;];%[^;];%[^;];%[^\n]\n", m1, m2, m3, m4) != EOF);
-
-        fclose(arquivo);
-        printf("\n");
-    }
-    else{
-        printf("Erro ao abrir o arquivo.\n");
-        system("pause");
-        return;
-    }
-
-    struct Ingresso{
-        char codigo[T_MAX_STR];
-        char nome[T_MAX_STR];
-        char tipo[T_MAX_STR];
-        char data_hora[T_MAX_STR];
-    };
-    // Converta a matriz de strings para uma matriz de ingressos
     struct Ingresso ingressos[linhas];
+    
+
     for (int i = 0; i < linhas; i++) {
-        strcpy(ingressos[i].codigo, matriz[i][0]);
-        strcpy(ingressos[i].tipo, matriz[i][2]);
-        strcpy(ingressos[i].data_hora, matriz[i][3]);
+        strcpy(ingressos[i].codigo, configs[i][0]);
+        strcpy(ingressos[i].nome, configs[i][1]);
+        strcpy(ingressos[i].tipo, configs[i][2]);
+        strcpy(ingressos[i].data_hora, configs[i][3]);
     }
 
-    // Aqui vocÃª pode calcular a somatÃ³ria a cada 3 meses para cada tipo de ingresso
-    int somatoria_trimestre_I[4] = {0, 0, 0, 0}; // Para cada trimestre do ano (4 trimestres)
+
+    // Calcula a somatória a cada 3 meses para cada tipo de ingresso sendo I (inteira), M (Meia) e X (isento) separando por trimestre.
+    int somatoria_trimestre_I[4] = {0, 0, 0, 0}; 
     int somatoria_trimestre_X[4] = {0, 0, 0, 0};
     int somatoria_trimestre_M[4] = {0, 0, 0, 0};
 
@@ -415,8 +401,17 @@ void resumoVendas() {
             }
         }
     }
+    printf(" 10 ultimas vendas:\n\n");
+    printf(" Codigo       Tema\t\t Tipo\t Data       Hora\n");
 
-    printf("Somatoria a cada 3 meses:\n");
+
+    for (int i = linhas - 1; i > linhas - 11; i --){
+       printf(" %s %s %s\t %s\n", ingressos[i].codigo, ingressos[i].nome, ingressos[i].tipo, ingressos[i].data_hora);
+
+    }
+    // double ticket
+
+    printf("\n\n\nSomatoria a cada 3 meses: \n");
     for (int t = 0; t < 4; t++) {
         printf("Trimestre %d - Tipo I: %d, Tipo X: %d, Tipo M: %d\n", t + 1, somatoria_trimestre_I[t], somatoria_trimestre_X[t], somatoria_trimestre_M[t]);
     }
@@ -447,3 +442,64 @@ void menuCredencial(int credenciais){
         break;
     }
 }
+
+
+
+void responderquestionario(int tema, int obra) {
+
+
+        int linhas=0;
+        int colunas=0;
+        char ***questionario = lerarquivo(Temass[tema].obras[obra].caminho_quest, &linhas, &colunas);
+        int n_questoes = linhas/(2+N_ALTERNATIVAS);
+
+        for (int i = 0; i < n_questoes; i++) 
+        {
+            int rowIndex = i * (N_ALTERNATIVAS + 2);  // Calcula o índice da linha para a pergunta atual
+
+            strcpy(Temass[tema].obras[obra].Questoes[i].pergunta               , questionario[rowIndex][0]);
+
+            for (int j = 1; j <= N_ALTERNATIVAS; j++) 
+            {
+                strcpy(Temass[tema].obras[obra].Questoes[i].alternativas[j - 1], questionario[rowIndex + j][0]);
+            }
+
+            strcpy(Temass[tema].obras[obra].Questoes[i].resposta               , questionario[rowIndex + N_ALTERNATIVAS + 1][0]);
+        }
+
+    char resposta;
+    int pontuacao = 0;
+
+    for (int i=0; i<3; i++) 
+    {
+        char respostacorreta = Temass[tema].obras[obra].Questoes[i].resposta[0];
+
+        system("cls");
+        printf("foi salvo");
+        printf("Questao %d:\n", i+1);
+        printf("%s\n", Temass[tema].obras[obra].Questoes[i].pergunta);  
+
+        for (int j = 0; j < N_ALTERNATIVAS; j++) {
+            printf("%s\n", Temass[tema].obras[obra].Questoes[i].alternativas[j]);  
+        }
+
+        printf("\nResposta: ");
+        scanf(" %c", &resposta);
+
+        if (resposta == respostacorreta) {
+            pontuacao++;  
+        }
+    }
+
+    
+    system("cls");
+
+    printf("\n\n");
+    printf("\t ________________________________________ \n");
+    printf("\t|                                        |\n");
+    printf("\t|     Voce acertou %02d de %02d questoes     |\n", pontuacao, n_questoes);
+    printf("\t|________________________________________|\n");
+    printf("\n\n\n");
+    system("pause");
+}
+
