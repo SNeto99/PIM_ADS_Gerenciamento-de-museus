@@ -127,7 +127,7 @@ int retornar_selecao(int *p_escolha, int num_op){
         while (loop == true){
 
             if (kbhit()) { // verifica se alguma tecla foi precionada
-                teclapressionada = getch(); // L� a tecla pressionada
+                teclapressionada = getch(); // Le a tecla pressionada
                 if (teclapressionada == -32) {
 
                     teclapressionada = getch();
@@ -207,70 +207,6 @@ char* horaAtual() {
     return buffer;
 }
 
-void salvarCompra(int obra, int meiaouinteira){
-
-    char nomeobra[50];
-    char char_meiaouinteira;
-    double codigo = codigoID();
-
-    switch (obra){
-        case 0:
-            strcpy(nomeobra, OBRA1);
-            break;
-
-        case 1:
-            strcpy(nomeobra, OBRA2);
-            break;
-    
-        case 2:
-            strcpy(nomeobra, OBRA3);
-            break;
-        
-        case 3:
-            strcpy(nomeobra, OBRA4);
-            break;
-    }
-    
-    switch (meiaouinteira){
-        case 0:
-            char_meiaouinteira = 'I';
-            break;
-
-        case 1:
-            char_meiaouinteira = 'M';
-            break;
-
-        case 2:
-            char_meiaouinteira = 'X';
-            break;
-    }
-        
-    
-    FILE *arquivo = fopen("tickets.csv", "a");
-    
-
-    if (arquivo != NULL)
-    {
-            char *hora = horaAtual();
-            fprintf(arquivo, "%.f;"    , codigo);
-            fprintf(arquivo, "%s;" , nomeobra);
-            fprintf(arquivo, "%c;" , char_meiaouinteira);
-            fprintf(arquivo, "%s\n", hora);
-            fclose(arquivo);
-
-            char str_codigo[50];
-            sprintf(str_codigo, "%.f", codigo);
-            ticket(nomeobra, char_meiaouinteira, str_codigo, hora);
-            system("pause");
-
-
-        }
-    else {
-        printf("Erro ao abrir o arquivo para salvar os tickets.\n");
-        system("pause");
-    }
-}
-
 double codigoID() {
     time_t hora_atual;
     struct tm *info_tempo;
@@ -316,7 +252,7 @@ void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], cha
     printf("\t\t\t ______________________________________________ \n");
     printf("\t\t\t|                                              |\n");
     printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
-    printf("\t\t\t|                %s          |\n"              , nomeobra);
+    printf("\t\t\t|%s|\n"                                        , nomeobra);
     printf("\t\t\t|                   %s                    |\n" , str_meiaouinteira);
     printf("\t\t\t|                                              |\n");
     printf("\t\t\t|                                              |\n");
@@ -338,81 +274,6 @@ int calcularTrimestre(const char *data_hora) {
     // Se a análise da data falhar, retorne -1 para indicar um erro
     return -1;
 }
-
-void responderquestionario(int arquivo) {
-    FILE *arquivoPerguntas;
-    FILE *arquivoRespostas;
-
-    switch (arquivo)
-    {
-        case 0:
-            arquivoPerguntas = fopen(CP_OBRA1, "r");
-            arquivoRespostas = fopen(CR_OBRA1, "r");
-            break;
-        case 1:
-            arquivoPerguntas = fopen(CP_OBRA2, "r");
-            arquivoRespostas = fopen(CR_OBRA2, "r");
-            break;
-        case 2:
-            arquivoPerguntas = fopen(CP_OBRA3, "r");
-            arquivoRespostas = fopen(CR_OBRA3, "r");
-            break;
-        case 3:
-            arquivoPerguntas = fopen(CP_OBRA4, "r");
-            arquivoRespostas = fopen(CR_OBRA4, "r");
-            break;
-    }
-    
-
-    char linha[300];
-    char respostaCorreta[15];  
-    int questao = 1;
-    int pontuacao = 0;
-
-    if (arquivoPerguntas == NULL || arquivoRespostas == NULL) {
-        printf("Erro ao abrir os arquivos de perguntas e respostas\n\n");
-        system("pause");
-        return;
-    }
-  
-    while (fgets(linha, sizeof(linha), arquivoPerguntas) != NULL) {
-        system("cls");
-        printf("Questao %d:\n", questao);
-        printf("%s", linha);  
-
-        char opcoes[4][100];  
-        for (int i = 0; i < 4; i++) {
-            fgets(opcoes[i], sizeof(opcoes[i]), arquivoPerguntas);  
-            printf("%s", opcoes[i]);  
-        }
-
-        fgets(respostaCorreta, sizeof(respostaCorreta), arquivoRespostas);
-
-        char resposta;
-        printf("\nDigite sua resposta: ");
-        scanf(" %c", &resposta);
-
-        if (resposta == respostaCorreta[0]) {
-            pontuacao++;  
-        }
-
-        questao++;  
-    }
-
-    fclose(arquivoPerguntas);
-    fclose(arquivoRespostas);
-    
-    system("cls");
-
-    printf("\n\n");
-    printf("\t ________________________________________ \n");
-    printf("\t|                                        |\n");
-    printf("\t|     Voce acertou %02d de 15 questoes    |\n", pontuacao);
-    printf("\t|________________________________________|\n");
-    printf("\n\n\n");
-    system("pause");
-}
-
 
 
 

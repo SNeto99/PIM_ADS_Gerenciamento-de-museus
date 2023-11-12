@@ -7,8 +7,6 @@
 #include <conio.h>
 #include <locale.h>
 #include <time.h>
-#include <dirent.h>
-
 
 #define NUM_OP 6
 #define T_PONT 5 
@@ -17,40 +15,56 @@
 #define N_MAX_OBRAS 10
 #define N_MAX_QUEST 10
 
-
-
-#define OBRA1 "Santos Dumont       "
-#define CP_OBRA1 "Questionarios\\questionario_Santos-Dumont.txt"
-#define CR_OBRA1 "Questionarios\\respostas_Santos-Dumont.txt"
-
-#define OBRA2 "Arte Moderna        "
-#define CP_OBRA2 "Questionarios\\questionario_Arte-Moderna.txt"
-#define CR_OBRA2 "Questionarios\\respostas_Arte-Moderna.txt"
-
-#define OBRA3 "Exploracao Espacial "
-#define CP_OBRA3 "Questionarios\\questionario_Espacial.txt"
-#define CR_OBRA3 "Questionarios\\respostas_Espacial.txt"
-
-#define OBRA4 "Jogos Olimpicos     "
-#define CP_OBRA4 "Questionarios\\questionario_Jogos-Olimpicos.txt"
-#define CR_OBRA4 "Questionarios\\respostas_Jogos-Olimpicos.txt"
-
+#define CAM_CREDENCIAL "credenciais.txt"
 #define CAM_TICKETS "tickets.csv"
-
-<<<<<<< Updated upstream
-=======
 
 #define true 1
 #define false 0
 
 #define N_ALTERNATIVAS 4
->>>>>>> Stashed changes
 
 
 
+struct Ingresso {
+    char codigo[30];
+    char nome[T_MAX_STR];
+    char tipo[30];
+    char data_hora[50];
+};
 
+struct Questao
+{
+    char pergunta[T_MAX_STR^2];
+    char alternativas[10][T_MAX_STR];
+    char resposta[10];
+};
 
+struct Descricao
+{
+    char nome[T_MAX_STR];
+    char autor[T_MAX_STR];
+    char data[T_MAX_STR];
+    char tipo[T_MAX_STR];
+    char descricao[T_MAX_STR^3];
 
+};
+
+struct Obra
+{
+    char nome[T_MAX_STR];
+    struct Descricao descricao;
+    struct Questao Questoes[N_MAX_QUEST];
+    char caminho_quest[T_MAX_STR*2];
+    int n_questoes;
+};
+
+struct Tema
+{
+    char nome[T_MAX_STR];
+    char caminho_defs[T_MAX_STR*2];
+    struct Obra obras[N_MAX_OBRAS];
+    int n_obras;
+};
 
 
 
@@ -63,12 +77,10 @@ void telainicial(int escolha, char* alternativas, int orientacao, int num_op);
 void telainicial2(int escolha, char *alternativas[], int orientacao, int num_op);
 char* opcao(int e, char *ponteiro, int num_op);
 int retornar_selecao(int *p_escolha, int num_op);
-void salvarCompra(int obra, int meiaouinteira);
 double codigoID();
 char* horaAtual();
 void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]);
 int calcularTrimestre(const char *data_hora);
-void responderquestionario(int arquivo);
 void menuCredencial(int credenciais);
 
 #endif

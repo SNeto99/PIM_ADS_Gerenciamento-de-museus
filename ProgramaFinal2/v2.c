@@ -58,6 +58,33 @@ int n_temas=0;
 // char Obras[N_MAX_TEMAS][N_MAX_OBRAS][][T_MAX_STR];
 int n_obras[N_MAX_TEMAS][N_MAX_OBRAS];
 
+void listarNomesArquivosCSV2(const char *caminho, char ***nomesArquivos, int *numArquivos) {
+    DIR *dir;
+    struct dirent *entrada;
+    int numArq = 0;
+    char **nomes = NULL;
+
+    dir = opendir(caminho);
+
+    if (dir == NULL) {
+        perror("Erro ao abrir a pasta");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entrada = readdir(dir)) != NULL) {
+        if (strstr(entrada->d_name, ".txt")) {
+            // Alocar memória para armazenar o nome do arquivo
+            nomes = (char **)realloc(nomes, (numArq + 1) * sizeof(char *));
+            nomes[numArq] = strdup(entrada->d_name);
+            numArq++;
+        }
+    }
+
+    closedir(dir);
+
+    *nomesArquivos = nomes;
+    *numArquivos = numArq;
+}
 
 
 int main(){
