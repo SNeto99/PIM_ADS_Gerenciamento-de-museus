@@ -1,12 +1,3 @@
-//para rodar o código:
-// gcc -o meu_programa v3.c funcs.c
-
-//!Fazer:
-// comentar o código
-// tratamento de erros
-// help()
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -128,7 +119,7 @@ int main(int argc, char *argv[]){
         char ***arquivo_credenciais = lerarquivo(CAM_CREDENCIAL, &linhas, &colunas);
         credenciais=atoi(arquivo_credenciais[0][1]);
     }
-    printf("\n\n\tCREDENCIAIS:%d\n\n\n", credenciais);
+    printf("\n\n\tCREDENCIAIS=%d\n\n\n", credenciais);
     system("pause");
     system("cls");
     //Listar o nome e o caminho das pastas na pasta PASTA_TEMAS
@@ -511,7 +502,7 @@ void resumoVendas()
     }
 
 
-    // Calcula a somatória a cada 3 meses para cada tipo de ingresso sendo I (inteira), 
+    // Calcula a somat?ria a cada 3 meses para cada tipo de ingresso sendo I (inteira), 
     // M (Meia) e X (isento) separando por trimestre.
     int somatoria_trimestre_I[4] = {0, 0, 0, 0}; 
     int somatoria_trimestre_X[4] = {0, 0, 0, 0};
@@ -572,7 +563,8 @@ void responderquestionario(int tema, int obra) {
 
         int linhas=0;
         int colunas=0;
-        char ***questionario = lerarquivo(Temass[tema].obras[obra].caminho_quest, &linhas, &colunas);
+        char ***questionario=lerarquivo(Temass[tema].obras[obra].caminho_quest, &linhas, &colunas);
+
         int n_questoes = linhas/(2+N_ALTERNATIVAS);
 
         for (int i = 0; i < n_questoes; i++) 
@@ -637,14 +629,14 @@ char*** lerarquivo(const char* filepath, int* numRows, int* numCols)
         exit(EXIT_FAILURE);
     }
 
-    // Contar o número de linhas e colunas
+    // Contar o n?mero de linhas e colunas
     *numRows = 0;
     *numCols = 0;
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         (*numRows)++;
         if (*numCols == 0) {
-            // Contar o número de colunas na primeira linha
+            // Contar o numero de colunas na primeira linha
             char* token = strtok(buffer, separador);
             while (token != NULL) {
                 (*numCols)++;
@@ -653,7 +645,7 @@ char*** lerarquivo(const char* filepath, int* numRows, int* numCols)
         }
     }
 
-    // Voltar para o início do arquivo
+    // Voltar para o inicio do arquivo
     fseek(file, 0, SEEK_SET);
 
     // Alocar matriz dinamicamente
@@ -704,7 +696,7 @@ void listarNomesArquivos(const char *caminho, const char *tipo, char ***nomesArq
 
     while ((entrada = readdir(dir)) != NULL) {
         if (strstr(entrada->d_name, tipo)) {
-            // Alocar memória para armazenar o nome do arquivo
+            // Alocar memoria para armazenar o nome do arquivo
             nomes = (char **)realloc(nomes, (numArq + 1) * sizeof(char *));
             nomes[numArq] = strdup(entrada->d_name);
             numArq++;
@@ -753,8 +745,8 @@ void listarNomesPastas(const char *caminho, char ***nomesPastas, int *numPastas)
 
 void telainicial(int escolha, char *alternativas, int orientacao, int num_op){    
     char opcoes[NUM_MAX_OP][T_PONT];
-    char *p = &opcoes[0][0]; //aponta para o endereï¿½o de memï¿½ria opcoes[0][0]
-    opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de seleï¿½ï¿½o (onde ï¿½ "--->" e onde ï¿½ "    " )
+    char *p = &opcoes[0][0]; //aponta para o endereço de memória opcoes[0][0]
+    opcao(escolha, &opcoes[0][0], num_op); //cria o vetor de texto do campo de seleção (onde é "--->" e onde é "    " )
     
 
         int cont=0;
@@ -945,7 +937,7 @@ double codigoID() {
     // Converter o tempo atual em uma estrutura de tm
     info_tempo = localtime(&hora_atual);
 
-    // Calcular o nï¿½mero inteiro no formato "%y%m%d%H%M%S"
+    // Calcular o número inteiro no formato "%y%m%d%H%M%S"
     double codigo = ((info_tempo->tm_year % 100) * 10000000000) +
                             ((info_tempo->tm_mon + 1)    * 100000000) +
                             (info_tempo->tm_mday         * 1000000) +
@@ -999,7 +991,7 @@ int calcularTrimestre(const char *data_hora) {
         return trimestre;
     }
     
-    // Se a anÃ¡lise da data falhar, retorne -1 para indicar um erro
+    // Se a análise da data falhar, retorne -1 para indicar um erro
     return -1;
 }
 

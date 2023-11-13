@@ -1,39 +1,39 @@
-O programa ler as credenciais na pasta do programa:
-
-        Credencial 1 -  a da Administrao onde  possivel entrar em todos os outros mdulos.
-        Credencial 2 -  a credencial para a bilheteria, onde  feita venda de bilhetes.
-        Credencial 3 -  a credencial para o check-in, onde ser feita a validao do bilhete do cliente.
-        Credencial 4 -  a credencial onde ser apresentada o tema escolhido, a descrio da obra e o questionario.
-Para alterar ou adicionar temas:
-
-Alterao geral de temas:
-
-        -Para alterar os temas  necessario acessar a pasta temas, l cada pasta representa um obra.
-        -Basta alterar o nome da Pasta para alterar o nome do tema/obra.
-        -Para alterar a descrio e soemente seguir o mesmo padro do arquivo atual, e salva-lo em CSV.
-        -E por ultimo, para alterar os questionario somente mudar as questoes, colocar respectivas respostas abaixo da questes
-e salva-las em TXT.
 
 
- Adminstrao ter acesso a todo sistema como:
+ Primeiro o programa lerá as credenciais na pasta do programa:
+   -Credencial 1 -  a da Administracao onde  possivel entrar em 
+    todos os outros modulos.
+   -Credencial 2 -  a credencial para a bilheteria, onde  feita 
+    venda de bilhetes.
+   -Credencial 3 -  a credencial para o check-in, onde ser feita a 
+    validacao do bilhete do cliente.
+   -Credencial 4 -  a credencial onde ser apresentada o tema escolhido, 
+    a descricao da obra e o questionario.
+   -Para acessar direto alguma obra a credencial deverá ser o numero 
+    do tema e da obra juntos (exemplo:32 -> entrará diretamente na obra 2 do tema 3)
 
-        Vender bilhetes:
+ Para alterar ou adicionar temas:
+   -Para alterar os temas é necessario acessar a pasta temas, Cada 
+    pasta representa um obra.
+   -Basta alterar o nome da Pasta para alterar o nome do tema/obra.
+   -Para alterar a descricao e somente seguir o mesmo padro do arquivo 
+    atual, e salva-lo em CSV.
+   -E por ultimo, para alterar os questionario somente mudar as questoes, 
+    colocar respectivas respostas abaixo da questoes e salva-las em TXT.
 
-        Permite a escolha de um tema para comprar um bilhete.
-        Aps escolher o tema, o usurio pode selecionar o tipo de tickets (inteira, meia, isento) e confirmar a compra
+ Os TICKETS, ficam armazenados na pasta principal do programa.
 
-        Validar bilhetes:
-
-        Permite a validao do ticket. O usurio insere o nmero do
-        bilhete, e o sistema verifica se o ticket  vlido e exibe suas informaes.
-
-        Acessar temas:
-
-        Permite a escolha de um tema e, em seguida, uma obra dentro desse tema.
-        O usurio pode responder a um questionrio associado  obra.
-
-        Ver resumo de vendas:
-
-        Exibe um resumo das ltimas 10 vendas e a soma por trimestre de diferentes tipos de tickets (inteira, meia,isento).
-
-        Sendo que os TICKETS, ficam armazenados na pasta principal do programa.
+ Adminstracao tem acesso a todo sistema como:
+   -Vender bilhetes:
+       Permite a escolha de um tema para comprar um bilhete.
+       Apos escolher o tema, o usuario pode selecionar o tipo de tickets 
+        (inteira, meia, isento) e confirmar a compra
+   Validar bilhetes:
+       Permite a validacao do ticket. O usuario insere o numero do
+       bilhete, e o sistema verifica se o ticket  valido e exibe suas informacoes.
+   Acessar temas:
+       Permite a escolha de um tema e, em seguida, uma obra dentro desse tema.
+       O usuario pode responder a um questionario associado obra.
+   Ver resumo de vendas:
+       Exibe um resumo das ultimas 10 vendas e a soma por trimestre de 
+        diferentes tipos de tickets (inteira, meia isento).
