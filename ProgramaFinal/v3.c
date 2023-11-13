@@ -527,7 +527,6 @@ void resumoVendas()
     for (int i = linhas - 1; (i>linhas-11) && (i>=0) ; i --){
        printf(" %s %s %s\t   %s\n", ingressos[i].codigo, ingressos[i].nome, ingressos[i].tipo, ingressos[i].data_hora);
     }
-    // 
 
     printf("\n\n\nSomatoria por trimestre: \n");
                         printf("\t ______________________________________ \n");
