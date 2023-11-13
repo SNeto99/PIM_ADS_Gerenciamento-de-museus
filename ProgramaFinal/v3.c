@@ -522,9 +522,9 @@ void resumoVendas()
     }
 
     printf(" 10 ultimas vendas:\n\n");
-    printf(" Codigo       Tema\t\t\t\t\t    Tipo   Data       Hora\n");
+    printf(" Codigo       Tema\t\t\t\t\t  Tipo     Data       Hora\n");
 
-    for (int i = linhas - 1; i > ((linhas-11)||0); i --){
+    for (int i = linhas - 1; (i>linhas-11) && (i>=0) ; i --){
        printf(" %s %s %s\t   %s\n", ingressos[i].codigo, ingressos[i].nome, ingressos[i].tipo, ingressos[i].data_hora);
     }
     // 
