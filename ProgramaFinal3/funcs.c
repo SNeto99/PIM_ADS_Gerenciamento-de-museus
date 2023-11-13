@@ -1,6 +1,8 @@
 #include "funcs.h"
 
 #include <stdio.h>
+#include <dirent.h>
+
 
 #define true 1
 #define false 0
@@ -63,11 +65,74 @@ void printarquivo(char*** matriz, int numRows, int numCols) {
         for (int j = 0; j < numCols; j++) {
             printf("%s\t", matriz[i][j]);
         }
-        // printf("\n");
+        printf("\n");
     }
 }
 
 
+
+
+
+void listarNomesArquivos(const char *caminho, const char *tipo, char ***nomesArquivos, int *numArquivos) {
+    DIR *dir;
+    struct dirent *entrada;
+    int numArq = 0;
+    char **nomes = NULL;
+
+    dir = opendir(caminho);
+
+    if (dir == NULL) {
+        perror("Erro ao abrir a pasta");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entrada = readdir(dir)) != NULL) {
+        if (strstr(entrada->d_name, tipo)) {
+            // Alocar memória para armazenar o nome do arquivo
+            nomes = (char **)realloc(nomes, (numArq + 1) * sizeof(char *));
+            nomes[numArq] = strdup(entrada->d_name);
+            numArq++;
+        }
+    }
+
+    closedir(dir);
+
+    *nomesArquivos = nomes;
+    *numArquivos = numArq;
+}
+
+void listarNomesPastas(const char *caminho, char ***nomesPastas, int *numPastas) {
+    DIR *dir;
+    struct dirent *entrada;
+    int numPasta = 0;
+    char **nomes = NULL;
+
+    dir = opendir(caminho);
+
+    if (dir == NULL) {
+        perror("Erro ao abrir a pasta");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entrada = readdir(dir)) != NULL) {
+        if (entrada->d_type == DT_DIR) { // Verifica se é um diretório
+            // Ignora as entradas '.' e '..'
+            if (strcmp(entrada->d_name, ".") == 0 || strcmp(entrada->d_name, "..") == 0) {
+                continue;
+            }
+
+            // Alocar memória para armazenar o nome da pasta
+            nomes = (char **)realloc(nomes, (numPasta + 1) * sizeof(char *));
+            nomes[numPasta] = strdup(entrada->d_name);
+            numPasta++;
+        }
+    }
+
+    closedir(dir);
+
+    *nomesPastas = nomes;
+    *numPastas = numPasta;
+}
 
 
 
@@ -234,6 +299,7 @@ double codigoID() {
 void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], char hora[50]){
 
     char str_meiaouinteira[50];
+    strNomalize(nomeobra);
 
     switch (char_meiaouinteira){
         case 'I':
@@ -249,18 +315,19 @@ void ticket(char nomeobra[50], char char_meiaouinteira, char str_codigo[50], cha
             break;
     }
 
-    printf("\t\t\t ______________________________________________ \n");
-    printf("\t\t\t|                                              |\n");
-    printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
-    printf("\t\t\t|%s|\n"                                        , nomeobra);
-    printf("\t\t\t|                   %s                    |\n" , str_meiaouinteira);
-    printf("\t\t\t|                                              |\n");
-    printf("\t\t\t|                                              |\n");
-    printf("\t\t\t|  id: %s                            |\n"      , str_codigo);
-    printf("\t\t\t|                                              |\n");
-    printf("\t\t\t|           hora da compra:%s |\n"             , hora);
-    printf("\t\t\t|______________________________________________|\n");
-    printf("\n\n\n");
+      printf("\t\t\t ______________________________________________ \n");
+      printf("\t\t\t|                                              |\n");
+      printf("\t\t\t|             1 TICKET PARA A OBRA:            |\n");
+      printf("\t\t\t|                                              |");fflush(stdout);
+    printf("\r\t\t\t| %s \n"                                        , nomeobra);
+      printf("\t\t\t|                   %s                    |\n" , str_meiaouinteira);
+      printf("\t\t\t|                                              |\n");
+      printf("\t\t\t|                                              |\n");
+      printf("\t\t\t|  id: %s                            |\n"      , str_codigo);
+      printf("\t\t\t|                                              |\n");
+      printf("\t\t\t|           hora da compra:%s |\n"             , hora);
+      printf("\t\t\t|______________________________________________|\n");
+      printf("\n\n\n");
 }
 
 int calcularTrimestre(const char *data_hora) {
@@ -276,9 +343,30 @@ int calcularTrimestre(const char *data_hora) {
 }
 
 
+int voltar(){
+       printf("\t\t--->Voltar");
+   int tecla;
+   while((tecla!=13) && (tecla!=27)){
+    tecla=getch();
+    // printf("\n%d", tecla);
+   }
+   return 1;
+}
 
+void strNomalize(char *str) {
+    int tamanhoDesejado = STR_NORMALIZADA;
+    int tamanhoAtual = strlen(str);
 
+    if (tamanhoAtual >= tamanhoDesejado) {
+        // A string já tem o tamanho desejado ou é maior, não é necessário preencher.
+        return;
+    }
 
+    int espacosFaltantes = tamanhoDesejado - tamanhoAtual;
+    for (int i = 0; i < espacosFaltantes; i++) {
+        strcat(str, " "); // Adiciona um espaço em branco no final da string.
+    }
+}
 
 
 //

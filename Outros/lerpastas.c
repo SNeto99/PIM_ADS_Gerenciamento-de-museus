@@ -55,34 +55,6 @@ int main2() {
     return 0;
 }
 
-void listarNomesArquivosCSV2(const char *caminho, char ***nomesArquivos, int *numArquivos) {
-    DIR *dir;
-    struct dirent *entrada;
-    int numArq = 0;
-    char **nomes = NULL;
-
-    dir = opendir(caminho);
-
-    if (dir == NULL) {
-        perror("Erro ao abrir a pasta");
-        exit(EXIT_FAILURE);
-    }
-
-    while ((entrada = readdir(dir)) != NULL) {
-        if (strstr(entrada->d_name, ".txt")) {
-            // Alocar memória para armazenar o nome do arquivo
-            nomes = (char **)realloc(nomes, (numArq + 1) * sizeof(char *));
-            nomes[numArq] = strdup(entrada->d_name);
-            numArq++;
-        }
-    }
-
-    closedir(dir);
-
-    *nomesArquivos = nomes;
-    *numArquivos = numArq;
-}
-
 int main() {
     const char *caminho = CAMINHO;  // Substitua pelo caminho da sua pasta
     char **nomesArquivos;
