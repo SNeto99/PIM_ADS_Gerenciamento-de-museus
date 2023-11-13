@@ -17,7 +17,7 @@
 
 
 #define T_PONT 5 
-#define T_MAX_STR 255
+#define T_MAX_STR 511
 #define NUM_MAX_OP  10
 #define N_MAX_TEMAS 10
 #define N_MAX_OBRAS 10
@@ -63,7 +63,7 @@ struct Descricao
 struct Obra
 {
     char nome[T_MAX_STR];
-    char caminho_pasta_obra[T_MAX_STR];
+    char caminho_pasta_obra[T_MAX_STR*2];
     char caminho_quest[T_MAX_STR*2];
     char caminho_descr[T_MAX_STR*2];
     int n_questoes;
@@ -103,11 +103,12 @@ void salvarCompra(int obra, int meiaouinteira);
 void administracao();
 void venderBilhetes();
 void validarBilhetes();
-void acessarObras();
+void acessarTemas();
+void acessarObra(int escolha, int escolha_obra);
+void responderquestionario(int tema, int obra);
 void resumoVendas();
 void ajuda();
 
-void responderquestionario(int tema, int obra);
 
 
 struct Tema Temass[N_MAX_TEMAS];
@@ -127,6 +128,9 @@ int main(int argc, char *argv[]){
         char ***arquivo_credenciais = lerarquivo(CAM_CREDENCIAL, &linhas, &colunas);
         credenciais=atoi(arquivo_credenciais[0][1]);
     }
+    printf("\n\n\tCREDENCIAIS:%d\n\n\n", credenciais);
+    system("pause");
+    system("cls");
     //Listar o nome e o caminho das pastas na pasta PASTA_TEMAS
     char **nomesPastas;
     int numPastas;
@@ -204,8 +208,14 @@ int main(int argc, char *argv[]){
         validarBilhetes();
         break;
     case 4:
-        acessarObras();
+        acessarTemas();
         break;
+    }
+    if (credenciais > 10){
+        int tm, ob;
+        tm = credenciais/10-1;
+        ob = credenciais%10-1;
+        acessarObra(tm, ob);
     }
 
 return 0;
@@ -235,7 +245,7 @@ void administracao()
             validarBilhetes();
         }
         if ((isenter == 1) && (escolha == 2)){
-            acessarObras();
+            acessarTemas();
         }
         if ((isenter == 1) && (escolha == 3)){
             resumoVendas();
@@ -385,9 +395,8 @@ void validarBilhetes()
     }
 }
 
-void acessarObras()
+void acessarTemas()
 {
- 
     int escolha = 0;
     int *p_escolha = &escolha;
     char *alt[N_MAX_TEMAS];
@@ -438,32 +447,7 @@ void acessarObras()
 
                 if ((isenter_2) && (escolha_obra != num_op_obras-1))
                 {
-                    int linhas=0, colunas=0;
-                    char ***descricao = lerarquivo(Temass[escolha].obras[escolha_obra].caminho_descr, &linhas, &colunas);
-
-                    int confirmar = 0;
-                    int *p_confirmar = &confirmar;
-                    char alternativas_3[][30] = {"Iniciar", "Voltar"};
-                    char *alt_3 = &alternativas_3[0][0];
-
-                    while (true)
-                    {
-                        system("cls");
-                        printf("\n");
-                        printarquivo(descricao, linhas, colunas);
-                        printf("\n\n\nQUESTIONARIO:\n");
-                        //cria os textos da tela inicial, incluindo aonde esta selecionado
-                        telainicial(confirmar, alt_3 , 1, 2);  
-                        int isenter_3 = 0;
-                        isenter_3= retornar_selecao(p_confirmar, 2);
-                        if ((isenter_3 == 1) && (confirmar == 0))
-                        {
-                            responderquestionario(escolha, escolha_obra);
-                        }
-                        if ((isenter_3 == 1) && (confirmar == 1)){
-                            break;
-                        }
-                    }
+                    acessarObra(escolha, escolha_obra);
                 }
 
                 if ((isenter_2 == 1) && (escolha_obra == num_op_obras-1)){
@@ -474,6 +458,36 @@ void acessarObras()
 
         if ((isenter) && (escolha == n_temas)){
             printf("\n\n");
+            break;
+        }
+    }
+}
+
+void acessarObra(int escolha, int escolha_obra)
+{
+    int linhas=0, colunas=0;
+    char ***descricao = lerarquivo(Temass[escolha].obras[escolha_obra].caminho_descr, &linhas, &colunas);
+
+    int confirmar = 0;
+    int *p_confirmar = &confirmar;
+    char alternativas_3[][30] = {"Iniciar", "Voltar"};
+    char *alt_3 = &alternativas_3[0][0];
+
+    while (true)
+    {
+        system("cls");
+        printf("\n");
+        printarquivo(descricao, linhas, colunas);
+        printf("\n\n\nQUESTIONARIO:\n");
+        //cria os textos da tela inicial, incluindo aonde esta selecionado
+        telainicial(confirmar, alt_3 , 1, 2);  
+        int isenter_3 = 0;
+        isenter_3= retornar_selecao(p_confirmar, 2);
+        if ((isenter_3 == 1) && (confirmar == 0))
+        {
+            responderquestionario(escolha, escolha_obra);
+        }
+        if ((isenter_3 == 1) && (confirmar == 1)){
             break;
         }
     }
